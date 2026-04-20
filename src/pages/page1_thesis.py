@@ -63,8 +63,10 @@ def render():
             '<div class="stat-label">Avengers issue #2 readership<br>2004 → 2018</div>'
             '<p style="font-family:\'Comic Neue\',cursive;font-size:0.82rem;color:#888;'
             'line-height:1.6;margin-top:0.6rem;margin-bottom:0;">'
-            'New Avengers launched at 153k readers at issue #2 in 2004. '
-            'The 2018 relaunch opened at 67k. Four relaunches. Fifty-six percent gone.'
+            'New Avengers opened at 153k at issue #2 in 2004. The 2018 relaunch: 67k. '
+            'Daredevil is down 43% from its late-90s baseline. '
+            'Amazing Spider-Man has held ~110–125k across every relaunch — '
+            'which tells you something about how much the character carries the book.'
             '</p>'
             '</div>',
             unsafe_allow_html=True
@@ -104,10 +106,13 @@ def render():
 
     prose("""
     <p>
-    <strong>First:</strong> Sustained readership at relaunch has declined across every tracked
-    flagship title. Each relaunch cycle opens to a smaller real audience than the last — the
-    Avengers line dropped 56% from its 2004 peak to its 2018 relaunch. The first-issue spikes
-    are real, but the readers who stay past issue twelve are fewer with each cycle.
+    <strong>First:</strong> The relaunch cycle's costs are not evenly distributed.
+    Amazing Spider-Man has held its core readership with remarkable consistency — around
+    110–125k at issue #2 across five relaunches spanning 25 years. Spider-Man is resilient enough
+    to absorb the reset. The Avengers line is not: 153k at issue #2 in 2004, down to 67k by 2018,
+    a 56% decline in sustained readership across four relaunch cycles. Daredevil is down 43% from
+    its late-90s baseline. The characters who most need long-term reader investment to build
+    their mythology are the ones the data shows losing the most ground.
     </p>
     <p>
     <strong>Second:</strong> Writer tenures on Amazing Spider-Man have compressed significantly.

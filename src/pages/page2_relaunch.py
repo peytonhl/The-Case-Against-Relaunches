@@ -329,18 +329,20 @@ def render():
 
     # --- Multi-title comparison ---
     st.markdown("<br>", unsafe_allow_html=True)
-    section_heading("The Same Pattern Across Every Flagship Title")
+    section_heading("Spider-Man Holds. Avengers and Daredevil Don't.")
 
     prose("""
     <p>
-    The Spider-Man data is instructive, but it is not unique. The same trajectory appears
-    across other flagship titles that have been through multiple relaunch cycles. Avengers.
-    Daredevil. In each case, the pattern is worth understanding: a launch spike, a settling
-    period, and a sustained readership that tends to be somewhat lower than the previous cycle.
+    The Spider-Man data reveals something important before we look at the other titles:
+    Amazing Spider-Man's issue #2 baseline has held between 110–125k across five relaunches
+    and 25 years. The character is resilient enough that readers keep showing up regardless
+    of volume number. That is genuinely impressive brand equity, and it matters for what
+    comes next.
     </p>
     <p>
-    The chart below plots issue #2 orders (the variant-free readership baseline) for every
-    tracked relaunch across Amazing Spider-Man, Avengers, and Daredevil.
+    It also makes the Avengers and Daredevil data more striking by contrast. The chart below
+    plots issue #2 orders — the variant-free readership baseline — for every tracked relaunch
+    across all three titles. The lines do not move together.
     </p>
     """)
 
@@ -413,16 +415,15 @@ def render():
         st.plotly_chart(fig_multi, use_container_width=True)
 
         chart_annotation(
-            "Avengers shows the steepest decline: New Avengers (2004) launched at 153k readers at issue #2 "
-            "under Brian Bendis, the high-water mark in the dataset. By 2018, Jason Aaron's relaunch "
-            "opened at 67k. That's a 56% decline in the real readership baseline across four relaunches. "
-            "Daredevil tells a similar story: 83k at issue #2 in 1998 (Kevin Smith/Bendis), "
-            "down to 41k by the 2011 Mark Waid relaunch, which was critically acclaimed. "
-            "Even a beloved run under a celebrated writer did not recover the readership ceiling. "
-            "Amazing Spider-Man's #2 baseline has held relatively flat across the same period, "
-            "which may reflect its flagship status, but it is not growing. "
-            "Across all three titles, the pattern is consistent: each relaunch inherits a smaller audience "
-            "than the one before it, and the ceiling does not recover."
+            "Avengers shows the steepest decline: New Avengers (2004) opened at 153k at issue #2 "
+            "under Brian Bendis — the high-water mark in this dataset. By 2018, Jason Aaron's relaunch "
+            "opened at 67k. That is a 56% decline in sustained readership across four relaunch cycles. "
+            "Daredevil tells the same story: 83k at issue #2 in 1998, down to 41k by 2011 — "
+            "a drop that even Mark Waid's critically acclaimed run did not reverse. "
+            "Amazing Spider-Man is the outlier: its baseline has held stable across the same 25-year window. "
+            "The difference is not creative quality. Waid's Daredevil was excellent. "
+            "The difference is that Spider-Man carries enough brand weight to survive a readership reset. "
+            "Most characters in the Marvel universe do not have that cushion."
         )
 
     pull_quote(
