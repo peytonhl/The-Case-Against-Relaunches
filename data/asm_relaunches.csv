@@ -1,0 +1,29 @@
+relaunch_volume,relaunch_year,writer,issue_num,orders,data_confidence,notes
+2,1999,Howard Mackie,1,124903,Confirmed,Comichron Diamond monthly chart — Nov 1998 shipping
+2,1999,Howard Mackie,2,82000,Estimate,No monthly chart data available; estimated at ~66% of #1
+2,1999,Howard Mackie,6,59000,Estimate,No monthly chart data available; interpolated from run trajectory
+2,1999,Howard Mackie,12,48000,Estimate,No monthly chart data available; interpolated from run trajectory
+2,1999,Howard Mackie,24,38000,Estimate,No monthly chart data available; interpolated from run trajectory
+2,1999,Howard Mackie,36,31000,Estimate,No monthly chart data available; interpolated from run trajectory
+3,2014,Dan Slott,1,532586,Confirmed - Variant Inflated,Comichron Diamond Apr 2014; includes 75+ variant editions — not comparable to reader demand
+3,2014,Dan Slott,2,123945,Confirmed,Comichron Diamond May 2014 — primary readership baseline
+3,2014,Dan Slott,6,84000,Estimate,Monthly chart data not yet retrieved; interpolated
+3,2014,Dan Slott,12,63000,Estimate,Monthly chart data not yet retrieved; interpolated
+3,2014,Dan Slott,24,49000,Estimate,Monthly chart data not yet retrieved; interpolated
+3,2014,Dan Slott,36,41000,Estimate,Monthly chart data not yet retrieved; interpolated
+4,2015,Dan Slott,1,245873,Confirmed,Comichron Diamond Oct 2015
+4,2015,Dan Slott,2,111322,Confirmed,Comichron Diamond Oct 2015 — biweekly; same month as #1
+4,2015,Dan Slott,6,76517,Confirmed,Comichron Diamond Jan 2016
+4,2015,Dan Slott,12,59000,Estimate,Monthly chart data not yet retrieved; interpolated
+4,2015,Dan Slott,24,46000,Estimate,Monthly chart data not yet retrieved; interpolated
+4,2015,Dan Slott,36,39000,Estimate,Monthly chart data not yet retrieved; interpolated
+5,2018,Nick Spencer,1,289102,Confirmed,Comichron Diamond Jul 2018
+5,2018,Nick Spencer,2,113944,Confirmed,Comichron Diamond Aug 2018
+5,2018,Nick Spencer,6,93000,Estimate,Monthly chart data not yet retrieved; interpolated
+5,2018,Nick Spencer,12,75155,Confirmed,Comichron Diamond Dec 2018
+5,2018,Nick Spencer,24,89641,Confirmed - Event Boosted,Comichron Diamond Jun 2019; boosted by Absolute Carnage tie-in
+5,2018,Nick Spencer,36,63000,Estimate,Monthly chart data not yet retrieved; interpolated
+6,2022,Zeb Wells,1,256800,PRH Estimate,Comichron combined estimate (Diamond 92448 + PRH projection); PRH data not publicly available
+6,2022,Zeb Wells,2,170000,PRH Estimate,Diamond figure normalized using 0.36 Diamond/total ratio from #1; PRH data not publicly available
+6,2022,Zeb Wells,6,124000,PRH Estimate,Diamond figure normalized using 0.36 Diamond/total ratio; PRH data not publicly available
+6,2022,Zeb Wells,12,101000,PRH Estimate,Diamond figure normalized using 0.36 Diamond/total ratio; PRH data not publicly available
