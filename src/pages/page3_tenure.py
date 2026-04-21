@@ -101,7 +101,6 @@ def render():
                 textposition="outside",
                 textfont=dict(size=10, color="#888"),
                 hovertemplate=hover,
-                ),
                 showlegend=False,
             ))
 
