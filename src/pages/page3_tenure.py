@@ -57,13 +57,17 @@ def render():
 
     prose("""
     <p>
-    The chart below is a sixty-year record of creative trust. Each bar represents a single writer's
-    primary run on <em>Amazing Spider-Man</em>, ordered chronologically from Stan Lee's 1963 launch
-    to the present. Bar length equals issues written. The color indicates the publishing era.
+    The chart below is a sixty-year record of run length on <em>Amazing Spider-Man</em>.
+    Each bar represents a single writer's primary run, ordered chronologically from Stan Lee's
+    1963 launch to the present. Bar length equals issues written. The color indicates the publishing era.
     </p>
     <p>
-    The left side of the chart tells the story of how Marvel's most enduring characters were built.
-    The right side raises a question worth sitting with.
+    Writer change frequency is roughly similar across eras — the 1980s actually had more new writers
+    per decade than the 2010s. What has changed is the mechanism behind the changes.
+    Most historical transitions were organic: a writer finished their story and moved on, or editorial
+    decided to try something new. Since 2018, each transition has been driven by a full series relaunch —
+    the title cancelled, the numbering reset to #1, a new creative team starting fresh.
+    That structural difference is what this data is about.
     </p>
     """)
 
@@ -135,9 +139,10 @@ def render():
         "The Silver and Bronze Age writers averaged 40+ issues per run. "
         "David Michelinie's Copper Age run, which gave us Venom and Carnage, lasted 93 issues. "
         "J. Michael Straczynski's run lasted 73. Dan Slott's solo tenure was 153. "
-        "Since Slott's departure in 2018, the average primary writer tenure has been under 57 issues, "
-        "with two relaunches in that window. The bars on the right reflect real choices about how "
-        "long a writer gets to develop their vision — and what becomes possible when that window is longer."
+        "Since Slott's departure in 2018, there have been two complete relaunch cycles on Amazing Spider-Man. "
+        "Spencer's run ended not because his story concluded, but because the series was cancelled and relaunched. "
+        "Wells's run ended the same way. Each relaunch reset the counter before either run could develop "
+        "the kind of sustained momentum that produced Venom, the Superior Spider-Man arc, or the black costume saga."
     )
     data_note("Data: approximate issue counts from primary writer tenure on Amazing Spider-Man (vol. 1 legacy numbering). "
               "Multi-writer or fill-in periods excluded. Brand New Day (2008–10) shown at ~25 issues per writer in the rotation. "
@@ -145,14 +150,14 @@ def render():
 
     # --- Chart 2: Years on title (runway) ---
     st.markdown("<br>", unsafe_allow_html=True)
-    section_heading("Runway: Years on Title")
+    section_heading("Runway: Years Before the Next Relaunch")
 
     prose("""
     <p>
     Issue counts overstate recent tenures. Biweekly publishing schedules mean a writer can
     accumulate 70+ issues in three years. The more honest measure of creative runway is calendar
-    time — how many years a writer was trusted to develop their vision on the book.
-    The chart below replots the same runs measured in years rather than issues.
+    time — how many years passed before the next relaunch reset the series.
+    The chart below replots the same runs measured in years.
     </p>
     """)
 
@@ -249,14 +254,15 @@ def render():
         "Every one of them clears the 5-year line. Michelinie (5 years, Venom + Carnage). "
         "Straczynski (6 years, Morlun, the redefining of Peter's origin). "
         "Slott (8 years, Superior Spider-Man). "
-        "Since 2018, no writer has cleared that threshold — Spencer ended at 3 years, "
-        "Wells at 2. The issue counts look closer to historical norms because of biweekly publishing, "
-        "but the calendar runway is not. A writer who knows they have three years plans a three-year story."
+        "The post-2018 runs are not shorter because the writers ran out of ideas — "
+        "Spencer and Wells are both capable writers with strong bodies of work. "
+        "They're shorter because each run was ended by a series relaunch before it could develop "
+        "into something with that kind of depth. The relaunch is doing the interrupting."
     )
 
     # --- Chart 3: Writer change frequency by decade ---
     st.markdown("<br>", unsafe_allow_html=True)
-    section_heading("Writer Changes by Decade")
+    section_heading("Relaunch-Driven Writer Changes by Decade")
 
     decades = list(range(1960, 2030, 10))
     decade_labels = [f"{d}s" for d in decades]
@@ -291,13 +297,14 @@ def render():
     st.plotly_chart(fig3, use_container_width=True)
 
     chart_annotation(
-        "Writer change frequency alone does not tell the full story — the 1980s saw five new primary writers "
-        "and still produced Michelinie's 93-issue run. The difference is that 1980s writers who got traction "
-        "were allowed to stay. Michelinie ran from 1988 to 1993 without a relaunch cutting him off. "
-        "The modern pattern is different: Spencer (2018–21) and Wells (2022–24) are separated by a relaunch, "
-        "and neither was given enough calendar time to develop the kind of long-form arc the title is known for. "
-        "The frequency of changes isn't the problem in isolation — it's the combination of frequent changes "
-        "and structural relaunch pressure that prevents any single run from building real momentum."
+        "The 1980s saw the most writer changes of any decade — five new primary writers — "
+        "and still produced Michelinie's 93-issue run and the creation of Venom. "
+        "High writer turnover has always been part of the title. The difference is what drove it. "
+        "Historical transitions were largely organic: a writer finished their arc, "
+        "editorial made a change, someone moved to another title. "
+        "Post-2018, each transition is a relaunch — a deliberate series cancellation and reset "
+        "designed to generate a #1 issue sales spike. The writer changes are a symptom. "
+        "The relaunch is the cause."
     )
 
     st.markdown("<br>", unsafe_allow_html=True)
@@ -314,12 +321,12 @@ def render():
     a writer knows they will be around to pay it off.
     </p>
     <p>
-    Roger Stern gave us the Hobgoblin and left before he could resolve the mystery because he was
-    pushed out. Tom DeFalco inherited the plot and did his best with it. The Hobgoblin storyline
-    is still remembered as unresolved, decades later, not because anyone failed, but because the
-    story needed more time than the circumstances allowed. That is the cost of a shortened tenure,
-    and it compounds: the villain is diminished, the arc is incomplete, and future writers have
-    less to build on.
+    The relaunch creates a specific structural problem for long-form storytelling: it forces
+    incoming writers to start fresh rather than build on what came before. Nick Spencer spent
+    three years re-establishing Peter Parker's identity and setting up threads that were never paid off.
+    Zeb Wells inherited a reset, not a handoff. When Wells's run ended in another relaunch,
+    those threads reset again. Each cycle leaves less accumulated story for the next writer to work with,
+    and readers who invested in an ongoing arc get a #1 issue instead of a resolution.
     </p>
     <p>
     The MCU built its first three phases on characters with decades of accumulated story depth.
@@ -331,8 +338,7 @@ def render():
     """)
 
     pull_quote(
-        "Venom. The Winter Soldier. The modern Black Panther. "
-        "Every one of them was the product of a writer "
-        "who was left alone long enough to finish a thought. "
-        "That is still the most powerful tool in comics."
+        "Venom took 25 issues to set up and a full year to pay off. "
+        "The relaunch gives you a #1 and a fresh start. "
+        "Those are not the same thing."
     )
