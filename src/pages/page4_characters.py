@@ -166,8 +166,8 @@ def render():
             xanchor="left",
         )
 
+    fig1.update_layout(**dict(PLOTLY_LAYOUT))
     fig1.update_layout(
-        **dict(PLOTLY_LAYOUT),
         height=980,
         xaxis=dict(**AXIS_STYLE, title="Years from First Comic Appearance to MCU Debut", range=[0, 82]),
         yaxis=dict(**AXIS_STYLE, autorange=True),

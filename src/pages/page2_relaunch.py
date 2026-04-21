@@ -133,7 +133,7 @@ def render():
         ),
         legend=dict(bgcolor="#111", bordercolor="#333", borderwidth=1, font=dict(size=11)),
         title=dict(
-            text="ASM Sales Trajectory by Relaunch, Starting from Issue #2 (Variant-Free Baseline)",
+            text="ASM Sales Trajectory by Relaunch (Issue #2 Baseline)",
             font=dict(size=13, color="#ccc"), x=0.0,
         ),
     )
@@ -209,11 +209,11 @@ def render():
         textfont=dict(size=11, color="#ccc"),
     ))
 
+    fig2.update_layout(**dict(PLOTLY_LAYOUT))
     fig2.update_layout(
-        **dict(PLOTLY_LAYOUT),
-        height=400,
+        height=430,
         barmode="group",
-        xaxis=dict(**AXIS_STYLE),
+        xaxis=dict(**AXIS_STYLE, tickangle=-40),
         yaxis=dict(**AXIS_STYLE, title="Orders (thousands)",
             range=[0, 620],
         ),
@@ -222,6 +222,7 @@ def render():
             text="Issue #1 Orders (variant-inflated) vs. Issue #2 (real readership baseline)",
             font=dict(size=13, color="#ccc"), x=0.0,
         ),
+        margin=dict(t=40, b=100, l=60, r=40),
     )
     st.plotly_chart(fig2, use_container_width=True)
 
@@ -237,7 +238,7 @@ def render():
 
     # --- Chart 3: Drop-off rate from #2 to #12 ---
     st.markdown("<br>", unsafe_allow_html=True)
-    section_heading("The Floor Is Falling")
+    section_heading("The Same Ceiling, Every Time")
 
     issue_12 = df_main[df_main["issue_num"] == 12][["relaunch_volume", "orders", "data_confidence"]].rename(
         columns={"orders": "orders_12", "data_confidence": "conf_12"}
@@ -293,10 +294,10 @@ def render():
         height=320,
         xaxis=dict(**AXIS_STYLE),
         yaxis=dict(**AXIS_STYLE, title="Issue #12 Orders (thousands)",
-            range=[40, 100],
+            range=[35, 115],
         ),
         title=dict(
-            text="Issue #12 Sustained Readership Floor by Relaunch",
+            text="Issue #12 Sustained Readership by Relaunch",
             font=dict(size=13, color="#ccc"), x=0.0,
         ),
     )
@@ -356,7 +357,7 @@ def render():
             "Amazing Spider-Man": "#e23636",
             "Avengers":           "#5b8dbf",
             "Daredevil":          "#e8b84b",
-            "Captain America":    "#2e5fa3",
+            "Captain America":    "#2aa198",
             "Thor":               "#bf6f30",
         }
         TITLE_EMOJI = {
@@ -408,7 +409,7 @@ def render():
         fig_multi.update_layout(
             **dict(PLOTLY_LAYOUT),
             height=460,
-            xaxis=dict(**AXIS_STYLE, title="Relaunch Year", dtick=4),
+            xaxis=dict(**AXIS_STYLE, title="Relaunch Year", dtick=6),
             yaxis=dict(**AXIS_STYLE, title="Issue #2 Orders (thousands)", range=[20, 180]),
             legend=dict(bgcolor="#111", bordercolor="#333", borderwidth=1, font=dict(size=11)),
             title=dict(

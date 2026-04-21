@@ -125,7 +125,7 @@ def render():
         barmode="overlay",
         xaxis=dict(**AXIS_STYLE, title="Issues Written", range=[0, 175]),
         yaxis=dict(**AXIS_STYLE, autorange="reversed"),
-        margin=dict(t=40, b=50, l=230, r=130),
+        margin=dict(t=40, b=50, l=210, r=110),
         title=dict(
             text="Amazing Spider-Man: Primary Writer Tenure by Issues",
             font=dict(size=14, color="#cccccc"),
