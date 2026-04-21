@@ -235,6 +235,36 @@ def render():
         st.warning("Data file not found: data/asm_relaunches.csv")
 
     # -------------------------------------------------------------------------
+    section_heading("2b. Multi-Title Comparison Data")
+
+    prose("""
+    <p>
+    The multi-title chart in Section 02 includes issue #2 order estimates for Captain America
+    and Thor in addition to the Amazing Spider-Man, Avengers, and Daredevil data documented
+    above. These figures carry a different confidence level and that distinction matters.
+    </p>
+    <p>
+    <strong>Amazing Spider-Man, Avengers, and Daredevil</strong> figures come from Comichron's
+    published Diamond monthly charts and are labeled Confirmed or PRH Estimate accordingly.
+    </p>
+    <p>
+    <strong>Captain America and Thor</strong> figures are author estimates derived from
+    Comichron's monthly chart archives and labeled <em>Estimate</em> throughout. They have not
+    been individually verified against the specific monthly chart page for each issue. The
+    directional pattern (a consistent decline from the mid-2000s through 2018) is well-supported
+    by industry reporting and is unlikely to change materially with direct verification, but
+    readers who want confirmed figures should check the relevant Comichron monthly pages:
+    comichron.com/monthlycomicssales/YEAR/YEAR-MM.html for the shipping month of each issue #2.
+    </p>
+    <p>
+    Specific figures used: Captain America Vol. 3 (1998, Waid) ~85k; Vol. 5 (2004, Brubaker)
+    ~90k; Vol. 7 (2013, Remender) ~72k; Captain America (2018, Coates) ~57k.
+    Thor Vol. 3 (2007, Straczynski) ~78k; Thor: God of Thunder (2012, Aaron) ~63k;
+    Thor (2018, Aaron) ~50k.
+    </p>
+    """)
+
+    # -------------------------------------------------------------------------
     section_heading("3. MCU Film Data")
 
     prose("""

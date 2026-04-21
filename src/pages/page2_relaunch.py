@@ -329,7 +329,7 @@ def render():
 
     # --- Multi-title comparison ---
     st.markdown("<br>", unsafe_allow_html=True)
-    section_heading("Spider-Man Holds. Avengers and Daredevil Don't.")
+    section_heading("Spider-Man Holds. The Rest of the Catalog Doesn't.")
 
     prose("""
     <p>
@@ -340,9 +340,9 @@ def render():
     comes next.
     </p>
     <p>
-    It also makes the Avengers and Daredevil data more striking by contrast. The chart below
-    plots issue #2 orders (the variant-free readership baseline) for every tracked relaunch
-    across all three titles. The lines do not move together.
+    The chart below plots issue #2 orders (the variant-free readership baseline) for every
+    tracked relaunch across five flagship Marvel titles. With more titles in view, the pattern
+    becomes harder to dismiss: ASM's stability is the outlier, not the norm.
     </p>
     """)
 
@@ -356,16 +356,20 @@ def render():
             "Amazing Spider-Man": "#e23636",
             "Avengers":           "#5b8dbf",
             "Daredevil":          "#e8b84b",
+            "Captain America":    "#2e5fa3",
+            "Thor":               "#bf6f30",
         }
         TITLE_EMOJI = {
             "Amazing Spider-Man": "🕷",
             "Avengers":           "⭐",
             "Daredevil":          "⚖",
+            "Captain America":    "🛡",
+            "Thor":               "⚡",
         }
 
         fig_multi = go.Figure()
 
-        for title in ["Amazing Spider-Man", "Avengers", "Daredevil"]:
+        for title in ["Amazing Spider-Man", "Avengers", "Daredevil", "Captain America", "Thor"]:
             subset = mdf[mdf["title"] == title].sort_values("relaunch_year")
             if subset.empty:
                 continue
@@ -397,36 +401,34 @@ def render():
 
         fig_multi.add_annotation(
             x=0.01, y=0.02, xref="paper", yref="paper",
-            text="All data points = Issue #2 (variant-free readership baseline) · 🕷 ASM · ⭐ Avengers · ⚖ Daredevil",
+            text="All points = Issue #2 baseline · 🕷 ASM · ⭐ Avengers · ⚖ Daredevil · 🛡 Cap · ⚡ Thor · Dashed = estimate or PRH-normalized",
             showarrow=False, font=dict(size=9, color="#555"), xanchor="left",
         )
 
         fig_multi.update_layout(
             **dict(PLOTLY_LAYOUT),
-            height=420,
+            height=460,
             xaxis=dict(**AXIS_STYLE, title="Relaunch Year", dtick=4),
-            yaxis=dict(**AXIS_STYLE, title="Issue #2 Orders (thousands)", range=[20, 175]),
+            yaxis=dict(**AXIS_STYLE, title="Issue #2 Orders (thousands)", range=[20, 180]),
             legend=dict(bgcolor="#111", bordercolor="#333", borderwidth=1, font=dict(size=11)),
             title=dict(
-                text="Issue #2 Readership at Relaunch: Amazing Spider-Man, Avengers, Daredevil",
+                text="Issue #2 Readership at Relaunch: Five Marvel Flagship Titles",
                 font=dict(size=13, color="#ccc"), x=0.0,
             ),
         )
         st.plotly_chart(fig_multi, use_container_width=True)
 
         chart_annotation(
-            "Avengers shows the steepest decline: New Avengers (2004) opened at 153k at issue #2 "
-            "under Brian Bendis, the high-water mark in this dataset. By 2018, Jason Aaron's relaunch "
-            "opened at 67k. That is a 56% decline in sustained readership across four relaunch cycles. "
-            "Daredevil tells the same story: 83k at issue #2 in 1998, down to 41k by 2011, "
-            "a drop that even Mark Waid's critically acclaimed run did not reverse. "
-            "Amazing Spider-Man held between 110–125k from 1999 through 2018 on confirmed Comichron data. "
-            "The 2022 data point (170k) is a PRH estimate based on normalization methodology "
-            "and carries wider error bars; treat it as directional rather than precise. "
-            "The confirmed data alone supports the stability argument through 2018. "
-            "The difference between ASM and the other titles is not creative quality. "
-            "Waid's Daredevil was excellent. It is that Spider-Man carries enough brand weight "
-            "to survive a readership reset. Most characters in the Marvel universe do not have that cushion."
+            "Four of the five titles show a consistent downward trend across relaunch cycles. "
+            "Avengers drops from 153k (Bendis, 2004) to 67k (Aaron, 2018), a 56% decline. "
+            "Captain America falls from ~90k (Brubaker, 2004) to ~57k (Coates, 2018), down 37%. "
+            "Thor declines from ~78k (Straczynski, 2007) to ~50k (Aaron, 2018), down 36%. "
+            "Daredevil goes from 83k (1998) to 41k (Waid, 2011), down 51%. "
+            "Amazing Spider-Man held between 110–125k from 1999 through 2018 on confirmed Comichron data, "
+            "the only title in this set without a meaningful downward trend across the same period. "
+            "Captain America and Thor figures are estimates derived from Comichron's monthly charts; "
+            "see the Appendix for confidence classifications. "
+            "The ASM 2022 data point (170k) is a PRH estimate and carries wider error bars."
         )
 
         prose("""
