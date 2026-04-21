@@ -112,8 +112,11 @@ def render():
     110–125k at issue #2 across five relaunches spanning 25 years. Spider-Man is resilient enough
     to absorb the reset. The Avengers line is not: 153k at issue #2 in 2004, down to 67k by 2018,
     a 56% decline in sustained readership across four relaunch cycles. Daredevil is down 43% from
-    its late-90s baseline. The characters who most need long-term reader investment to build
-    their mythology are the ones the data shows losing the most ground.
+    its late-90s baseline. The difference is not creative quality — Daredevil had Miller, Bendis,
+    and Waid, three of the strongest sustained runs in Marvel's catalog. The difference is that
+    readers are invested in <em>Peter Parker</em>, not just Spider-Man. The alter-ego depth that
+    makes ASM resilient is precisely what the rest of the catalog lacks, and what long-form
+    development is best positioned to build.
     </p>
     <p>
     <strong>Second:</strong> Writer tenures on Amazing Spider-Man have compressed significantly.

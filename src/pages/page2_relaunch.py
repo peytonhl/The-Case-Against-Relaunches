@@ -429,6 +429,39 @@ def render():
             "to survive a readership reset. Most characters in the Marvel universe do not have that cushion."
         )
 
+        prose("""
+        <p>
+        Why does Spider-Man hold when comparably well-crafted titles don't? The data can't answer
+        that directly, but the pattern is consistent with something that is easy to overlook in a
+        sales analysis: <strong>readers aren't just buying Spider-Man. They're buying Peter Parker.</strong>
+        </p>
+        <p>
+        Most Marvel characters are defined primarily by their powers, their costume, or their
+        mission. Captain America is the shield and the ideal. Daredevil is the radar sense and
+        Hell's Kitchen. The Avengers are a rotating lineup organized around a concept. Strip away
+        the costume and there isn't much story left to tell. Spider-Man is different. Peter Parker —
+        the broke photographer, the overcommitted grad student, the kid who can never catch a break —
+        is the character. The powers are almost incidental. The stories that made Spider-Man a cultural
+        force weren't about what he could do. They were about what it cost him to keep doing it.
+        </p>
+        <p>
+        That depth of alter-ego investment insulates ASM from the worst effects of the relaunch
+        cycle. A reader who cares about Peter Parker will show up for the new #1 because the
+        character they love is still in it. A reader who cares about "Avengers" as a concept has
+        less reason to follow when the roster, creative team, and direction all reset simultaneously.
+        Daredevil had Frank Miller, Brian Michael Bendis, and Mark Waid — three of the strongest
+        sustained creative runs in Marvel's catalog — and the readership still declined 50% over
+        15 years. The relaunch cycle erodes even the best-built audiences over time.
+        </p>
+        <p>
+        The implication for the business case is direct: <em>Peter Parker's resilience is not an
+        argument for continuing to relaunch Amazing Spider-Man.</em> It's an argument for
+        investing that same alter-ego depth into the characters who currently lack it.
+        The Avengers lineup doesn't have a Peter Parker. Neither does most of the Marvel catalog.
+        That is a gap that long-form character development — not a new #1 — is best positioned to fill.
+        </p>
+        """)
+
     pull_quote(
         "The readers who kept showing up for Avengers and Daredevil through every relaunch "
         "are exactly the audience worth building for. "
