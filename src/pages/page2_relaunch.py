@@ -357,10 +357,10 @@ def render():
             "Avengers":           "#5b8dbf",
             "Daredevil":          "#e8b84b",
         }
-        TITLE_SYMBOLS = {
-            "Amazing Spider-Man": "circle",
-            "Avengers":           "square",
-            "Daredevil":          "diamond",
+        TITLE_EMOJI = {
+            "Amazing Spider-Man": "🕷",
+            "Avengers":           "⭐",
+            "Daredevil":          "⚖",
         }
 
         fig_multi = go.Figure()
@@ -370,34 +370,34 @@ def render():
             if subset.empty:
                 continue
             is_confirmed = subset["data_confidence"].str.startswith("Confirmed")
+            emoji = TITLE_EMOJI[title]
             fig_multi.add_trace(go.Scatter(
                 x=subset["relaunch_year"],
                 y=subset["orders"] / 1000,
-                mode="lines+markers",
+                mode="lines+markers+text",
                 name=title,
                 line=dict(color=TITLE_COLORS[title], width=2.5),
                 marker=dict(
                     color=TITLE_COLORS[title],
-                    size=10,
-                    symbol=[TITLE_SYMBOLS[title] if c else TITLE_SYMBOLS[title] + "-open"
-                            for c in is_confirmed],
-                    opacity=[1.0 if c else 0.6 for c in is_confirmed],
-                    line=dict(width=1.5, color=TITLE_COLORS[title]),
+                    size=18,
+                    opacity=0,
                 ),
-                text=subset["run_label"],
+                text=[emoji] * len(subset),
+                textposition="middle center",
+                textfont=dict(size=16),
+                customdata=list(zip(subset["run_label"], subset["data_confidence"])),
                 hovertemplate=(
-                    "<b>%{text}</b><br>"
+                    "<b>%{customdata[0]}</b><br>"
                     "Year: %{x}<br>"
                     "Issue #2 orders: %{y:.1f}k<br>"
-                    "%{customdata}"
+                    "%{customdata[1]}"
                     "<extra></extra>"
                 ),
-                customdata=subset["data_confidence"],
             ))
 
         fig_multi.add_annotation(
             x=0.01, y=0.02, xref="paper", yref="paper",
-            text="All data points = Issue #2 (variant-free readership baseline) · Hollow markers = Estimate or PRH-normalized",
+            text="All data points = Issue #2 (variant-free readership baseline) · 🕷 ASM · ⭐ Avengers · ⚖ Daredevil",
             showarrow=False, font=dict(size=9, color="#555"), xanchor="left",
         )
 
