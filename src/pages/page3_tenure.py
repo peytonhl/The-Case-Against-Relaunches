@@ -115,8 +115,8 @@ def render():
             xanchor="left",
         )
 
+    fig.update_layout(**dict(PLOTLY_LAYOUT))
     fig.update_layout(
-        **PLOTLY_LAYOUT,
         height=620,
         barmode="overlay",
         xaxis=dict(**AXIS_STYLE, title="Issues Written", range=[0, 175]),
@@ -181,10 +181,10 @@ def render():
             showlegend=False,
             hovertemplate=(
                 f"<b>{row['writer']}</b><br>"
-                f"{row['start_year']}–{row['end_year']}<br>"
-                f"{row['years']} years · {row['issues']} issues<br>"
-                + (f"<i>{landmark}</i>" if landmark else "")
-                + "<extra></extra>"
+                f"{row['start_year']}-{row['end_year']}<br>"
+                f"{row['years']} years | {row['issues']} issues<br>"
+                f"{'<i>' + landmark + '</i>' if landmark else ''}"
+                f"<extra></extra>"
             ),
         ))
         # Label notable runs
