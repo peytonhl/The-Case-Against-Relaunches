@@ -26,7 +26,7 @@ CHARACTER_EMOJI = {
     "Doctor Strange":           "✨",
     "Black Panther":            "🐾",
     "Star-Lord":                "🚀",
-    "Thanos":                   "💜",
+    "Thanos":                   "🧤",
     "Rocket Raccoon":           "🦝",
     "Groot":                    "🌿",
     "Winter Soldier":           "🦾",
@@ -41,6 +41,7 @@ CHARACTER_EMOJI = {
     "Moon Knight":              "🌙",
     "Scarlet Witch":            "🔮",
     "Captain Marvel":          "✦",
+    "Daredevil":               "⚖",
 }
 
 CHARACTER_DATA = [
@@ -79,6 +80,7 @@ CHARACTER_DATA = [
     # Copper Age
     {"character": "Nebula",                 "first_year": 1985, "mcu_year": 2014, "era": "Copper Age",   "role": "Supporting", "creator": "Roger Stern",                  "source_run": "Avengers + Infinity Gauntlet"},
     {"character": "Ant-Man (Scott Lang)",   "first_year": 1979, "mcu_year": 2015, "era": "Bronze Age",   "role": "Lead",       "creator": "David Michelinie",             "source_run": "Marvel Premiere (1979) + Avengers"},
+    {"character": "Daredevil",             "first_year": 1964, "mcu_year": 2015, "era": "Silver Age",   "role": "Lead",       "creator": "Stan Lee & Bill Everett",      "source_run": "Frank Miller's run (1979–83); Bendis/Maleev (2001–06)"},
     # Modern Age
     {"character": "Winter Soldier",         "first_year": 2005, "mcu_year": 2014, "era": "Modern Age",   "role": "Supporting", "creator": "Ed Brubaker",                  "source_run": "Brubaker's Captain America (2005–12)"},
     {"character": "Okoye",                  "first_year": 1998, "mcu_year": 2018, "era": "Modern Age",   "role": "Supporting", "creator": "Christopher Priest",           "source_run": "Priest's Black Panther (1998–2003)"},
