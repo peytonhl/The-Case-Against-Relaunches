@@ -8,13 +8,13 @@ def render():
     page_header(
         kicker="Section 01",
         title="The Case Against the Relaunch",
-        subtitle="A data-driven argument for investing in the stories that built the Marvel universe — and will build the next one."
+        subtitle="A data-driven argument for investing in the stories that built the Marvel universe, and will build the next one."
     )
 
     prose("""
     <p>
     Marvel Comics has spent sixty years building some of the most durable characters in popular
-    fiction. Spider-Man, Captain America, Black Panther, the Guardians of the Galaxy — characters
+    fiction. Spider-Man, Captain America, Black Panther, the Guardians of the Galaxy: characters
     that began as ink on newsprint and became a $30 billion film franchise. That did not happen
     by accident. It happened because generations of writers were given the time and editorial
     support to develop those characters fully, and because Marvel's publishing model, at its best,
@@ -24,7 +24,7 @@ def render():
     This project examines what the data shows about that model: where it has worked, where recent
     trends diverge from the patterns that produced Marvel's most enduring stories, and what a
     publishing strategy explicitly oriented toward long-term character development might look like.
-    The argument is data-driven and the goal is straightforward — more great Marvel stories, built
+    The argument is data-driven and the goal is straightforward: more great Marvel stories, built
     to last, for more generations of readers.
     </p>
     """)
@@ -58,14 +58,14 @@ def render():
         st.markdown(
             '<div class="stat-card" style="height:100%;">'
             '<div style="font-family:\'Bangers\',cursive;font-size:0.75rem;color:#e23636;'
-            'letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.4rem;">Pillar I — Audience Decay</div>'
+            'letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.4rem;">Pillar I: Audience Decay</div>'
             '<div class="stat-number">−56%</div>'
             '<div class="stat-label">Avengers issue #2 readership<br>2004 → 2018</div>'
             '<p style="font-family:\'Comic Neue\',cursive;font-size:0.82rem;color:#888;'
             'line-height:1.6;margin-top:0.6rem;margin-bottom:0;">'
             'New Avengers opened at 153k at issue #2 in 2004. The 2018 relaunch: 67k. '
             'Daredevil is down 43% from its late-90s baseline. '
-            'Amazing Spider-Man has held ~110–125k across every relaunch — '
+            'Amazing Spider-Man has held ~110–125k across every relaunch, '
             'which tells you something about how much the character carries the book.'
             '</p>'
             '</div>',
@@ -75,14 +75,14 @@ def render():
         st.markdown(
             '<div class="stat-card" style="height:100%;">'
             '<div style="font-family:\'Bangers\',cursive;font-size:0.75rem;color:#e23636;'
-            'letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.4rem;">Pillar II — Tenure Collapse</div>'
+            'letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.4rem;">Pillar II: Tenure Collapse</div>'
             '<div class="stat-number">2.4 yrs</div>'
             '<div class="stat-label">Avg. ASM writer tenure<br>post-2018</div>'
             '<p style="font-family:\'Comic Neue\',cursive;font-size:0.82rem;color:#888;'
             'line-height:1.6;margin-top:0.6rem;margin-bottom:0;">'
             'Since 2018, both ASM relaunch cycles ended before reaching 3 years. '
-            'Every run that produced a lasting character or villain — '
-            'Michelinie, Straczynski, Slott — ran at least 5.'
+            'Michelinie, Straczynski, Slott: every run that produced a lasting character '
+            'or villain ran for at least 5 years.'
             '</p>'
             '</div>',
             unsafe_allow_html=True
@@ -91,7 +91,7 @@ def render():
         st.markdown(
             '<div class="stat-card" style="height:100%;">'
             '<div style="font-family:\'Bangers\',cursive;font-size:0.75rem;color:#e23636;'
-            'letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.4rem;">Pillar III — Pipeline Erosion</div>'
+            'letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.4rem;">Pillar III: Pipeline Erosion</div>'
             '<div class="stat-number">−21 pts</div>'
             '<div class="stat-label">MCU avg RT score<br>Phase 3 → Phase 5</div>'
             '<p style="font-family:\'Comic Neue\',cursive;font-size:0.82rem;color:#888;'
@@ -108,11 +108,11 @@ def render():
     prose("""
     <p>
     <strong>First:</strong> The relaunch cycle's costs are not evenly distributed.
-    Amazing Spider-Man has held its core readership with remarkable consistency — around
+    Amazing Spider-Man has held its core readership with remarkable consistency, around
     110–125k at issue #2 across five relaunches spanning 25 years. Spider-Man is resilient enough
     to absorb the reset. The Avengers line is not: 153k at issue #2 in 2004, down to 67k by 2018,
     a 56% decline in sustained readership across four relaunch cycles. Daredevil is down 43% from
-    its late-90s baseline. The difference is not creative quality — Daredevil had Miller, Bendis,
+    its late-90s baseline. The difference is not creative quality. Daredevil had Miller, Bendis,
     and Waid, three of the strongest sustained runs in Marvel's catalog. The difference is that
     readers are invested in <em>Peter Parker</em>, not just Spider-Man. The alter-ego depth that
     makes ASM resilient is precisely what the rest of the catalog lacks, and what long-form
@@ -120,7 +120,7 @@ def render():
     </p>
     <p>
     <strong>Second:</strong> Writer tenures on Amazing Spider-Man have compressed significantly.
-    The runs that defined Spider-Man as a cultural force — Lee, Conway, Michelinie, Straczynski —
+    Lee, Conway, Michelinie, Straczynski: the runs that defined Spider-Man as a cultural force
     were built by writers given 40 to 153 issues to develop their vision. The post-2018 average
     is 57 issues across two relaunches. The characters that became cultural phenomena, Venom,
     the Hobgoblin, the black costume arc, were built slowly. That kind of development requires runway.

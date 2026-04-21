@@ -53,7 +53,7 @@ def render():
     The relaunch is one of Marvel's most consistent sales tools. Publish a new #1, generate
     first-issue excitement, and watch the numbers spike. The strategy has a genuine rationale:
     new entry points are valuable, and a fresh creative team can reinvigorate a title that has
-    lost momentum. What makes the data interesting is what it shows about the full cycle — not
+    lost momentum. What makes the data interesting is what it shows about the full cycle: not
     just the spike, but the baseline readership that follows, and how that baseline has shifted
     across multiple relaunch cycles over two decades.
     </p>
@@ -113,7 +113,7 @@ def render():
             ),
             opacity=opacity,
             hovertemplate=(
-                f"<b>{meta['label']}</b> — {meta['writer']}<br>"
+                f"<b>{meta['label']}</b>, {meta['writer']}<br>"
                 "Issue #%{x}<br>"
                 "Orders: %{y:.1f}k<br>"
                 "%{customdata}"
@@ -133,7 +133,7 @@ def render():
         ),
         legend=dict(bgcolor="#111", bordercolor="#333", borderwidth=1, font=dict(size=11)),
         title=dict(
-            text="ASM Sales Trajectory by Relaunch — Starting from Issue #2 (Variant-Free Baseline)",
+            text="ASM Sales Trajectory by Relaunch, Starting from Issue #2 (Variant-Free Baseline)",
             font=dict(size=13, color="#ccc"), x=0.0,
         ),
     )
@@ -184,9 +184,9 @@ def render():
         marker_opacity=0.25,
         marker_pattern_shape="/",
         hovertemplate=(
-            "<b>%{x} — Issue #1</b><br>"
+            "<b>%{x}, Issue #1</b><br>"
             "%{y:.0f}k orders<br>"
-            "<i>Includes variant covers — not a readership figure</i>"
+            "<i>Includes variant covers; not a readership figure</i>"
             "<extra></extra>"
         ),
     ))
@@ -199,9 +199,9 @@ def render():
         marker_color=[VOLUME_META[v]["color"] for v in issue_twos["relaunch_volume"]],
         marker_opacity=0.9,
         hovertemplate=(
-            "<b>%{x} — Issue #2</b><br>"
+            "<b>%{x}, Issue #2</b><br>"
             "%{y:.0f}k orders<br>"
-            "<i>First variant-free issue — actual reader demand</i>"
+            "<i>First variant-free issue; actual reader demand</i>"
             "<extra></extra>"
         ),
         text=[f"{o/1000:.0f}k" for o in issue_twos["orders"]],
@@ -341,7 +341,7 @@ def render():
     </p>
     <p>
     It also makes the Avengers and Daredevil data more striking by contrast. The chart below
-    plots issue #2 orders — the variant-free readership baseline — for every tracked relaunch
+    plots issue #2 orders (the variant-free readership baseline) for every tracked relaunch
     across all three titles. The lines do not move together.
     </p>
     """)
@@ -408,7 +408,7 @@ def render():
             yaxis=dict(**AXIS_STYLE, title="Issue #2 Orders (thousands)", range=[20, 175]),
             legend=dict(bgcolor="#111", bordercolor="#333", borderwidth=1, font=dict(size=11)),
             title=dict(
-                text="Issue #2 Readership at Relaunch — Amazing Spider-Man, Avengers, Daredevil",
+                text="Issue #2 Readership at Relaunch: Amazing Spider-Man, Avengers, Daredevil",
                 font=dict(size=13, color="#ccc"), x=0.0,
             ),
         )
@@ -416,15 +416,15 @@ def render():
 
         chart_annotation(
             "Avengers shows the steepest decline: New Avengers (2004) opened at 153k at issue #2 "
-            "under Brian Bendis — the high-water mark in this dataset. By 2018, Jason Aaron's relaunch "
+            "under Brian Bendis, the high-water mark in this dataset. By 2018, Jason Aaron's relaunch "
             "opened at 67k. That is a 56% decline in sustained readership across four relaunch cycles. "
-            "Daredevil tells the same story: 83k at issue #2 in 1998, down to 41k by 2011 — "
+            "Daredevil tells the same story: 83k at issue #2 in 1998, down to 41k by 2011, "
             "a drop that even Mark Waid's critically acclaimed run did not reverse. "
             "Amazing Spider-Man held between 110–125k from 1999 through 2018 on confirmed Comichron data. "
             "The 2022 data point (170k) is a PRH estimate based on normalization methodology "
-            "and carries wider error bars — treat it as directional rather than precise. "
+            "and carries wider error bars; treat it as directional rather than precise. "
             "The confirmed data alone supports the stability argument through 2018. "
-            "The difference between ASM and the other titles is not creative quality — "
+            "The difference between ASM and the other titles is not creative quality. "
             "Waid's Daredevil was excellent. It is that Spider-Man carries enough brand weight "
             "to survive a readership reset. Most characters in the Marvel universe do not have that cushion."
         )
@@ -439,9 +439,9 @@ def render():
         Most Marvel characters are defined primarily by their powers, their costume, or their
         mission. Captain America is the shield and the ideal. Daredevil is the radar sense and
         Hell's Kitchen. The Avengers are a rotating lineup organized around a concept. Strip away
-        the costume and there isn't much story left to tell. Spider-Man is different. Peter Parker —
-        the broke photographer, the overcommitted grad student, the kid who can never catch a break —
-        is the character. The powers are almost incidental. The stories that made Spider-Man a cultural
+        the costume and there isn't much story left to tell. Spider-Man is different. Peter Parker
+        is the character: the broke photographer, the overcommitted grad student, the kid who can
+        never catch a break. The powers are almost incidental. The stories that made Spider-Man a cultural
         force weren't about what he could do. They were about what it cost him to keep doing it.
         </p>
         <p>
@@ -449,8 +449,8 @@ def render():
         cycle. A reader who cares about Peter Parker will show up for the new #1 because the
         character they love is still in it. A reader who cares about "Avengers" as a concept has
         less reason to follow when the roster, creative team, and direction all reset simultaneously.
-        Daredevil had Frank Miller, Brian Michael Bendis, and Mark Waid — three of the strongest
-        sustained creative runs in Marvel's catalog — and the readership still declined 50% over
+        Daredevil had Frank Miller, Brian Michael Bendis, and Mark Waid, three of the strongest
+        sustained creative runs in Marvel's catalog, and the readership still declined 50% over
         15 years. The relaunch cycle erodes even the best-built audiences over time.
         </p>
         <p>
@@ -458,7 +458,7 @@ def render():
         argument for continuing to relaunch Amazing Spider-Man.</em> It's an argument for
         investing that same alter-ego depth into the characters who currently lack it.
         The Avengers lineup doesn't have a Peter Parker. Neither does most of the Marvel catalog.
-        That is a gap that long-form character development — not a new #1 — is best positioned to fill.
+        That is a gap that long-form character development is best positioned to fill. A new #1 doesn't do it.
         </p>
         """)
 

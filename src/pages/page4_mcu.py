@@ -37,7 +37,7 @@ def render():
 
     prose("""
     <p>
-    The popular explanation for the MCU's recent critical trajectory is superhero fatigue — too many
+    The popular explanation for the MCU's recent critical trajectory is superhero fatigue: too many
     films, too much content, audience attention stretched thin. That is a credible factor and worth
     keeping in the picture.
     </p>
@@ -46,7 +46,7 @@ def render():
     runs average roughly 90% on Rotten Tomatoes. Films built on thinner source material average in the
     mid-60s. That gap holds across phases and genres and shows up clearly in the phase averages as
     the proportion of deep-source films in each slate has shifted. The films that defined the MCU's
-    cultural peak were not just good superhero movies — many were good adaptations of genuinely great
+    cultural peak were not just good superhero movies. Many were good adaptations of genuinely great
     comics, written by people who had years to develop the characters, villains, and emotional logic
     that the films then translated to the screen.
     </p>
@@ -175,8 +175,8 @@ def render():
     phase_avgs = df.groupby("phase")["rt_score"].mean()
 
     stat_cards([
-        (f"{strong_mean:.0f}%", "Avg RT — Strong Source"),
-        (f"{weak_mean:.0f}%", "Avg RT — Weak Source"),
+        (f"{strong_mean:.0f}%", "Avg RT, Strong Source"),
+        (f"{weak_mean:.0f}%", "Avg RT, Weak Source"),
         (f"+{gap:.0f} pts", "Source quality gap"),
         (f"{phase_avgs.get(3, 0):.0f}% → {phase_avgs.get(5, 0):.0f}%", "Phase 3 → Phase 5 avg RT"),
     ])

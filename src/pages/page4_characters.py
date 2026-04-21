@@ -122,7 +122,7 @@ def render():
     df["years_developed"] = df["mcu_year"] - df["first_year"]
     df = df.sort_values("years_developed", ascending=True)
 
-    # --- Chart 1: Development Lead Time — The Hero Chart ---
+    # --- Chart 1: Development Lead Time (The Hero Chart) ---
     section_heading("Years from First Comic Appearance to MCU Debut")
 
     fig1 = go.Figure()
@@ -213,7 +213,7 @@ def render():
             marker_opacity=0.9 if role == "Lead" else 0.45,
             marker_pattern_shape="" if role == "Lead" else "/",
             hovertemplate=(
-                f"<b>%{{x}}</b> — {role}<br>"
+                f"<b>%{{x}}</b>, {role}<br>"
                 "Characters: %{y}"
                 "<extra></extra>"
             ),
@@ -246,7 +246,7 @@ def render():
         "that is being drawn down."
     )
 
-    # --- Chart 3: Scatter — First Appearance Year vs. Years Developed ---
+    # --- Chart 3: Scatter (First Appearance Year vs. Years Developed) ---
     st.markdown("<br>", unsafe_allow_html=True)
     section_heading("The Compression Is Accelerating")
 

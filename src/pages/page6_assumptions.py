@@ -145,7 +145,7 @@ def render():
     comparability:
     </p>
     <p>
-    <strong>Approach 1 — Use Comichron's estimates.</strong> Comichron has been attempting to
+    <strong>Approach 1: Use Comichron's estimates.</strong> Comichron has been attempting to
     reconstruct total market figures by combining Diamond data with estimates derived from PRH's
     reorder charts, retailer-reported data, and historical ratios. For Amazing Spider-Man Vol. 6
     #1 (April 2022), Comichron reported a Diamond-only figure of 92,448 and estimated a combined
@@ -153,7 +153,7 @@ def render():
     used in this project where Comichron estimates are available.
     </p>
     <p>
-    <strong>Approach 2 — Apply the 35% normalization factor.</strong> Where Comichron does not
+    <strong>Approach 2: Apply the 35% normalization factor.</strong> Where Comichron does not
     provide a combined estimate, a raw Diamond figure can be divided by 0.35 to produce a rough
     total-market estimate. This is a blunt instrument. The actual Diamond share varies by
     title, retailer, and month, but it provides a directionally correct comparison to pre-2021
@@ -161,7 +161,7 @@ def render():
     <em>PRH Estimate</em>.
     </p>
     <p>
-    <strong>Approach 3 — Restrict comparisons to pre-2021 data.</strong> The cleanest analytical
+    <strong>Approach 3: Restrict comparisons to pre-2021 data.</strong> The cleanest analytical
     choice is to limit trajectory comparisons to the period where data is directly comparable
     (1999–2021). The Vol. 5 run (2018–2021) provides a complete, high-confidence dataset for
     the final pre-PRH relaunch cycle. This approach is appropriate when precision matters

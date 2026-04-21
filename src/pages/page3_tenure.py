@@ -62,10 +62,10 @@ def render():
     1963 launch to the present. Bar length equals issues written. The color indicates the publishing era.
     </p>
     <p>
-    Writer change frequency is roughly similar across eras — the 1980s actually had more new writers
+    Writer change frequency is roughly similar across eras. The 1980s actually had more new writers
     per decade than the 2010s. What has changed is the mechanism behind the changes.
     Most historical transitions were organic: a writer finished their story and moved on, or editorial
-    decided to try something new. Since 2018, each transition has been driven by a full series relaunch —
+    decided to try something new. Since 2018, each transition has been driven by a full series relaunch,
     the title cancelled, the numbering reset to #1, a new creative team starting fresh.
     That structural difference is what this data is about.
     </p>
@@ -156,7 +156,7 @@ def render():
     <p>
     Issue counts overstate recent tenures. Biweekly publishing schedules mean a writer can
     accumulate 70+ issues in three years. The more honest measure of creative runway is calendar
-    time — how many years passed before the next relaunch reset the series.
+    time: how many years passed before the next relaunch reset the series.
     The chart below replots the same runs measured in years.
     </p>
     """)
@@ -207,7 +207,7 @@ def render():
     # Reference line: 5-year threshold
     fig2.add_hline(
         y=5, line_dash="dash", line_color="#444",
-        annotation_text="5-year threshold — minimum runway for a complete creative arc",
+        annotation_text="5-year threshold: minimum runway for a complete creative arc",
         annotation_font=dict(color="#555", size=10),
         annotation_position="top left",
     )
@@ -243,8 +243,8 @@ def render():
     runs_above_5yr = sum(1 for r in WRITER_DATA if r["years"] >= 5 and r["end_year"] <= 2018)
 
     stat_cards([
-        (f"{pre_avg_years:.1f} yrs", "Avg tenure — pre-2018 writers"),
-        (f"{post_avg_years:.1f} yrs", "Avg tenure — post-2018 writers"),
+        (f"{pre_avg_years:.1f} yrs", "Avg tenure, pre-2018 writers"),
+        (f"{post_avg_years:.1f} yrs", "Avg tenure, post-2018 writers"),
         (f"{runs_above_5yr}", "Runs ≥ 5 years (pre-2018)"),
         ("0", "Runs ≥ 5 years (post-2018)"),
     ])
@@ -254,7 +254,7 @@ def render():
         "Every one of them clears the 5-year line. Michelinie (5 years, Venom + Carnage). "
         "Straczynski (6 years, Morlun, the redefining of Peter's origin). "
         "Slott (8 years, Superior Spider-Man). "
-        "The post-2018 runs are not shorter because the writers ran out of ideas — "
+        "The post-2018 runs are not shorter because the writers ran out of ideas. "
         "Spencer and Wells are both capable writers with strong bodies of work. "
         "They're shorter because each run was ended by a series relaunch before it could develop "
         "into something with that kind of depth. The relaunch is doing the interrupting."
@@ -297,12 +297,12 @@ def render():
     st.plotly_chart(fig3, use_container_width=True)
 
     chart_annotation(
-        "The 1980s saw the most writer changes of any decade — five new primary writers — "
+        "The 1980s saw the most writer changes of any decade (five new primary writers) "
         "and still produced Michelinie's 93-issue run and the creation of Venom. "
         "High writer turnover has always been part of the title. The difference is what drove it. "
         "Historical transitions were largely organic: a writer finished their arc, "
         "editorial made a change, someone moved to another title. "
-        "Post-2018, each transition is a relaunch — a deliberate series cancellation and reset "
+        "Post-2018, each transition is a relaunch: a deliberate series cancellation and reset "
         "designed to generate a #1 issue sales spike. The writer changes are a symptom. "
         "The relaunch is the cause."
     )
