@@ -81,6 +81,16 @@ def render():
             color = ERA_COLORS[row["era"]]
             opacity = 0.5 if row["writer"] == "Brand New Day (rotating)" else 1.0
             landmark = LANDMARK_RUNS.get(row["writer"], "")
+            landmark_str = f"<i>{landmark}</i><br>" if landmark else ""
+            era_str = str(row["era"])
+            hover = (
+                f"<b>{row['writer']}</b><br>"
+                f"{row['start_year']}-{row['end_year']}<br>"
+                f"{row['issues']} issues | {row['years']} years<br>"
+                f"{landmark_str}"
+                f"Era: {era_str}"
+                f"<extra></extra>"
+            )
             fig.add_trace(go.Bar(
                 x=[row["issues"]],
                 y=[f"{row['writer']} ({row['start_year']})"],
@@ -90,13 +100,7 @@ def render():
                 text=f"  {row['issues']} issues",
                 textposition="outside",
                 textfont=dict(size=10, color="#888"),
-                hovertemplate=(
-                    f"<b>{row['writer']}</b><br>"
-                    f"{row['start_year']}–{row['end_year']}<br>"
-                    f"{row['issues']} issues · {row['years']} years<br>"
-                    + (f"<i>{landmark}</i><br>" if landmark else "")
-                    + "Era: " + row["era"] +
-                    "<extra></extra>"
+                hovertemplate=hover,
                 ),
                 showlegend=False,
             ))
