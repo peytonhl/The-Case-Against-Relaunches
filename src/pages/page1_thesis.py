@@ -80,8 +80,9 @@ def render():
             '<div class="stat-label">Avg. ASM writer tenure<br>post-2018</div>'
             '<p style="font-family:\'Comic Neue\',cursive;font-size:0.82rem;color:#888;'
             'line-height:1.6;margin-top:0.6rem;margin-bottom:0;">'
-            'Since Dan Slott\'s departure in 2018, no Amazing Spider-Man writer '
-            'has been given more than 74 issues. The Silver Age average was over 40.'
+            'Since 2018, both ASM relaunch cycles ended before reaching 3 years. '
+            'Every run that produced a lasting character or villain — '
+            'Michelinie, Straczynski, Slott — ran at least 5.'
             '</p>'
             '</div>',
             unsafe_allow_html=True

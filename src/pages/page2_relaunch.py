@@ -420,10 +420,13 @@ def render():
             "opened at 67k. That is a 56% decline in sustained readership across four relaunch cycles. "
             "Daredevil tells the same story: 83k at issue #2 in 1998, down to 41k by 2011 — "
             "a drop that even Mark Waid's critically acclaimed run did not reverse. "
-            "Amazing Spider-Man is the outlier: its baseline has held stable across the same 25-year window. "
-            "The difference is not creative quality. Waid's Daredevil was excellent. "
-            "The difference is that Spider-Man carries enough brand weight to survive a readership reset. "
-            "Most characters in the Marvel universe do not have that cushion."
+            "Amazing Spider-Man held between 110–125k from 1999 through 2018 on confirmed Comichron data. "
+            "The 2022 data point (170k) is a PRH estimate based on normalization methodology "
+            "and carries wider error bars — treat it as directional rather than precise. "
+            "The confirmed data alone supports the stability argument through 2018. "
+            "The difference between ASM and the other titles is not creative quality — "
+            "Waid's Daredevil was excellent. It is that Spider-Man carries enough brand weight "
+            "to survive a readership reset. Most characters in the Marvel universe do not have that cushion."
         )
 
     pull_quote(

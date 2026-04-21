@@ -82,7 +82,7 @@ def render():
     pull_quote(
         "A 77% single-issue drop is not reader attrition. "
         "It is the speculator market clearing. "
-        "Marvel knows this and counts the variants anyway."
+        "Issue #2 is the first number that means something."
     )
 
     # -------------------------------------------------------------------------
