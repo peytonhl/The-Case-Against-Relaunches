@@ -140,6 +140,51 @@ def render():
     """)
 
     st.markdown("<br>", unsafe_allow_html=True)
+    section_heading("What the Relaunch Gets Right")
+
+    prose("""
+    <p>
+    The argument here is against the <em>frequency</em> of relaunches and the structural
+    incentives behind them, not against the concept of a new #1 in principle. It is worth
+    being precise about what the strategy actually does well, because ignoring that would
+    make the critique less honest and the recommendations less useful.
+    </p>
+    <p>
+    <strong>New entry points have genuine value.</strong> Comics with sixty years of
+    continuity can be legitimately hard to walk into. A new #1 with a clean creative
+    premise lowers that barrier in a real way. Brian Michael Bendis's <em>New Avengers</em>
+    #1 in 2004 is the high-water mark in this dataset at 153k readers at issue #2. That
+    was a relaunch. It worked because Bendis had a clear vision, an accessible premise,
+    and editorial support to execute it over 65 issues. The relaunch was the vehicle.
+    The sustained creative investment was the engine.
+    </p>
+    <p>
+    <strong>Some relaunches have produced the catalog's best work.</strong> J. Michael
+    Straczynski's run began with a relaunch in 2001. So did Ed Brubaker's career-defining
+    Captain America run in 2004. The relaunch format is not inherently hostile to long-form
+    storytelling. The problem is when relaunching becomes a reflexive response to softening
+    numbers rather than a deliberate choice made in service of a creative vision. A relaunch
+    with a 6-year plan is a different instrument than a relaunch designed to generate a
+    first-issue spike and reset expectations.
+    </p>
+    <p>
+    <strong>The short-term economics are real.</strong> A new #1 reliably generates orders
+    above a title's recent baseline. For a struggling title, that spike can justify continued
+    publication and buy a creative team time to build an audience. This project does not
+    dispute any of that. What the data shows is that across multiple cycles and multiple
+    titles, the spike has not been translating into sustained readership growth. The readers
+    being attracted by the #1 are largely the same readers who were already buying the title.
+    The ceiling is not rising. It is just being reset.
+    </p>
+    """)
+
+    pull_quote(
+        "A relaunch with a six-year plan is a different instrument "
+        "than a relaunch designed to generate a first-issue spike. "
+        "The format is not the problem. The frequency is."
+    )
+
+    st.markdown("<br>", unsafe_allow_html=True)
     section_heading("Definitions")
 
     prose("""
