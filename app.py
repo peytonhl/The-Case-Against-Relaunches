@@ -8,7 +8,7 @@ st.set_page_config(
 )
 
 from src.utils.styling import inject_css
-from src.pages import page0_exec_summary, page1_thesis, page2_relaunch, page3_tenure, page4_characters, page4_mcu, page6_peter_parker, page5_business_case, page6_assumptions
+from src.pages import page0_exec_summary, page1_thesis, page2_relaunch, page3_tenure, page4_characters, page4_mcu, page6_peter_parker, page5_business_case, page6_assumptions, page8_forecast
 
 inject_css()
 
@@ -21,6 +21,7 @@ PAGES = {
     "05 — The Character Ledger": page4_characters,
     "06 — MCU Pipeline": page4_mcu,
     "07 — The Business Case": page5_business_case,
+    "08 — Readership Forecast": page8_forecast,
     "Appendix — Assumptions & Data": page6_assumptions,
 }
 

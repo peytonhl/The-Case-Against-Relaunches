@@ -1,0 +1,611 @@
+{
+  "trained_at": "2026-04-22T11:45:54.145208+00:00",
+  "model": {
+    "type": "Retention Rate Model (mean issue_N/issue2 across n relaunches)",
+    "n_samples": 5,
+    "training_era": "all available ASM relaunches",
+    "loocv_mae_k": 34.9,
+    "loocv_rmse_k": 45.0,
+    "ridge_coef_issue2_std": 9249.528989,
+    "ridge_intercept": 55021.52,
+    "ridge_scaler_mean_issue2": 129802.75,
+    "ridge_scaler_std_issue2": 27344.53
+  },
+  "retention": {
+    "6": {
+      "mean": 0.726,
+      "std": 0.055,
+      "n": 5
+    },
+    "12": {
+      "mean": 0.575,
+      "std": 0.059,
+      "n": 5
+    },
+    "24": {
+      "mean": 0.515,
+      "std": 0.184,
+      "n": 4
+    },
+    "36": {
+      "mean": 0.403,
+      "std": 0.102,
+      "n": 4
+    }
+  },
+  "historical": [
+    {
+      "volume": 3,
+      "year": 2014,
+      "writer": "Dan Slott",
+      "issue2_k": 123.9,
+      "issue12_actual_k": 63.0,
+      "issue12_predicted_k": 51.7,
+      "error_k": -11.3,
+      "retention_actual": 0.508,
+      "conf_issue12": "Estimate"
+    },
+    {
+      "volume": 4,
+      "year": 2015,
+      "writer": "Dan Slott",
+      "issue2_k": 111.3,
+      "issue12_actual_k": 59.0,
+      "issue12_predicted_k": 49.4,
+      "error_k": -9.6,
+      "retention_actual": 0.53,
+      "conf_issue12": "Estimate"
+    },
+    {
+      "volume": 5,
+      "year": 2018,
+      "writer": "Nick Spencer",
+      "issue2_k": 113.9,
+      "issue12_actual_k": 75.2,
+      "issue12_predicted_k": 36.8,
+      "error_k": -38.4,
+      "retention_actual": 0.66,
+      "conf_issue12": "Confirmed"
+    },
+    {
+      "volume": 6,
+      "year": 2022,
+      "writer": "Zeb Wells",
+      "issue2_k": 170.0,
+      "issue12_actual_k": 101.0,
+      "issue12_predicted_k": 20.9,
+      "error_k": -80.1,
+      "retention_actual": 0.594,
+      "conf_issue12": "PRH Estimate"
+    }
+  ],
+  "vol_trajectories": [
+    {
+      "volume": 2,
+      "year": 1999,
+      "writer": "Howard Mackie",
+      "issue2_k": 82.0,
+      "issue6_k": 59.0,
+      "conf_issue6": "Estimate",
+      "issue12_k": 48.0,
+      "conf_issue12": "Estimate",
+      "issue24_k": 38.0,
+      "conf_issue24": "Estimate",
+      "issue36_k": 31.0,
+      "conf_issue36": "Estimate"
+    },
+    {
+      "volume": 3,
+      "year": 2014,
+      "writer": "Dan Slott",
+      "issue2_k": 123.9,
+      "issue6_k": 84.0,
+      "conf_issue6": "Estimate",
+      "issue12_k": 63.0,
+      "conf_issue12": "Estimate",
+      "issue24_k": 49.0,
+      "conf_issue24": "Estimate",
+      "issue36_k": 41.0,
+      "conf_issue36": "Estimate"
+    },
+    {
+      "volume": 4,
+      "year": 2015,
+      "writer": "Dan Slott",
+      "issue2_k": 111.3,
+      "issue6_k": 76.5,
+      "conf_issue6": "Confirmed",
+      "issue12_k": 59.0,
+      "conf_issue12": "Estimate",
+      "issue24_k": 46.0,
+      "conf_issue24": "Estimate",
+      "issue36_k": 39.0,
+      "conf_issue36": "Estimate"
+    },
+    {
+      "volume": 5,
+      "year": 2018,
+      "writer": "Nick Spencer",
+      "issue2_k": 113.9,
+      "issue6_k": 93.0,
+      "conf_issue6": "Estimate",
+      "issue12_k": 75.2,
+      "conf_issue12": "Confirmed",
+      "issue24_k": 89.6,
+      "conf_issue24": "Confirmed - Event Boosted",
+      "issue36_k": 63.0,
+      "conf_issue36": "Estimate"
+    },
+    {
+      "volume": 6,
+      "year": 2022,
+      "writer": "Zeb Wells",
+      "issue2_k": 170.0,
+      "issue6_k": 124.0,
+      "conf_issue6": "PRH Estimate",
+      "issue12_k": 101.0,
+      "conf_issue12": "PRH Estimate"
+    }
+  ],
+  "what_if_curves": {
+    "50k": {
+      "issue2": 50000,
+      "issue6": {
+        "predicted_k": 36.3,
+        "ci_low_k": 32.9,
+        "ci_high_k": 39.7,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 28.8,
+        "ci_low_k": 25.1,
+        "ci_high_k": 32.5,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 25.7,
+        "ci_low_k": 11.1,
+        "ci_high_k": 40.3,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 20.2,
+        "ci_low_k": 12.1,
+        "ci_high_k": 28.2,
+        "retention": 0.403
+      }
+    },
+    "60k": {
+      "issue2": 60000,
+      "issue6": {
+        "predicted_k": 43.6,
+        "ci_low_k": 39.5,
+        "ci_high_k": 47.6,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 34.5,
+        "ci_low_k": 30.1,
+        "ci_high_k": 39.0,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 30.9,
+        "ci_low_k": 13.3,
+        "ci_high_k": 48.4,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 24.2,
+        "ci_low_k": 14.5,
+        "ci_high_k": 33.9,
+        "retention": 0.403
+      }
+    },
+    "70k": {
+      "issue2": 70000,
+      "issue6": {
+        "predicted_k": 50.8,
+        "ci_low_k": 46.1,
+        "ci_high_k": 55.6,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 40.3,
+        "ci_low_k": 35.1,
+        "ci_high_k": 45.4,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 36.0,
+        "ci_low_k": 15.6,
+        "ci_high_k": 56.5,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 28.2,
+        "ci_low_k": 16.9,
+        "ci_high_k": 39.5,
+        "retention": 0.403
+      }
+    },
+    "80k": {
+      "issue2": 80000,
+      "issue6": {
+        "predicted_k": 58.1,
+        "ci_low_k": 52.6,
+        "ci_high_k": 63.5,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 46.0,
+        "ci_low_k": 40.1,
+        "ci_high_k": 51.9,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 41.2,
+        "ci_low_k": 17.8,
+        "ci_high_k": 64.5,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 32.2,
+        "ci_low_k": 19.3,
+        "ci_high_k": 45.2,
+        "retention": 0.403
+      }
+    },
+    "90k": {
+      "issue2": 90000,
+      "issue6": {
+        "predicted_k": 65.3,
+        "ci_low_k": 59.2,
+        "ci_high_k": 71.5,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 51.8,
+        "ci_low_k": 45.2,
+        "ci_high_k": 58.4,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 46.3,
+        "ci_low_k": 20.0,
+        "ci_high_k": 72.6,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 36.3,
+        "ci_low_k": 21.7,
+        "ci_high_k": 50.8,
+        "retention": 0.403
+      }
+    },
+    "100k": {
+      "issue2": 100000,
+      "issue6": {
+        "predicted_k": 72.6,
+        "ci_low_k": 65.8,
+        "ci_high_k": 79.4,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 57.5,
+        "ci_low_k": 50.2,
+        "ci_high_k": 64.9,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 51.5,
+        "ci_low_k": 22.2,
+        "ci_high_k": 80.7,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 40.3,
+        "ci_low_k": 24.1,
+        "ci_high_k": 56.5,
+        "retention": 0.403
+      }
+    },
+    "110k": {
+      "issue2": 110000,
+      "issue6": {
+        "predicted_k": 79.9,
+        "ci_low_k": 72.4,
+        "ci_high_k": 87.3,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 63.3,
+        "ci_low_k": 55.2,
+        "ci_high_k": 71.4,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 56.6,
+        "ci_low_k": 24.5,
+        "ci_high_k": 88.8,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 44.3,
+        "ci_low_k": 26.5,
+        "ci_high_k": 62.1,
+        "retention": 0.403
+      }
+    },
+    "120k": {
+      "issue2": 120000,
+      "issue6": {
+        "predicted_k": 87.1,
+        "ci_low_k": 79.0,
+        "ci_high_k": 95.3,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 69.1,
+        "ci_low_k": 60.2,
+        "ci_high_k": 77.9,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 61.8,
+        "ci_low_k": 26.7,
+        "ci_high_k": 96.8,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 48.4,
+        "ci_low_k": 28.9,
+        "ci_high_k": 67.8,
+        "retention": 0.403
+      }
+    },
+    "130k": {
+      "issue2": 130000,
+      "issue6": {
+        "predicted_k": 94.4,
+        "ci_low_k": 85.5,
+        "ci_high_k": 103.2,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 74.8,
+        "ci_low_k": 65.2,
+        "ci_high_k": 84.4,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 66.9,
+        "ci_low_k": 28.9,
+        "ci_high_k": 104.9,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 52.4,
+        "ci_low_k": 31.3,
+        "ci_high_k": 73.4,
+        "retention": 0.403
+      }
+    },
+    "140k": {
+      "issue2": 140000,
+      "issue6": {
+        "predicted_k": 101.6,
+        "ci_low_k": 92.1,
+        "ci_high_k": 111.2,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 80.6,
+        "ci_low_k": 70.2,
+        "ci_high_k": 90.9,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 72.1,
+        "ci_low_k": 31.1,
+        "ci_high_k": 113.0,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 56.4,
+        "ci_low_k": 33.7,
+        "ci_high_k": 79.1,
+        "retention": 0.403
+      }
+    },
+    "150k": {
+      "issue2": 150000,
+      "issue6": {
+        "predicted_k": 108.9,
+        "ci_low_k": 98.7,
+        "ci_high_k": 119.1,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 86.3,
+        "ci_low_k": 75.3,
+        "ci_high_k": 97.4,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 77.2,
+        "ci_low_k": 33.4,
+        "ci_high_k": 121.0,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 60.5,
+        "ci_low_k": 36.2,
+        "ci_high_k": 84.7,
+        "retention": 0.403
+      }
+    },
+    "160k": {
+      "issue2": 160000,
+      "issue6": {
+        "predicted_k": 116.2,
+        "ci_low_k": 105.3,
+        "ci_high_k": 127.1,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 92.1,
+        "ci_low_k": 80.3,
+        "ci_high_k": 103.9,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 82.3,
+        "ci_low_k": 35.6,
+        "ci_high_k": 129.1,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 64.5,
+        "ci_low_k": 38.6,
+        "ci_high_k": 90.4,
+        "retention": 0.403
+      }
+    },
+    "170k": {
+      "issue2": 170000,
+      "issue6": {
+        "predicted_k": 123.4,
+        "ci_low_k": 111.9,
+        "ci_high_k": 135.0,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 97.8,
+        "ci_low_k": 85.3,
+        "ci_high_k": 110.4,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 87.5,
+        "ci_low_k": 37.8,
+        "ci_high_k": 137.2,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 68.5,
+        "ci_low_k": 41.0,
+        "ci_high_k": 96.0,
+        "retention": 0.403
+      }
+    },
+    "180k": {
+      "issue2": 180000,
+      "issue6": {
+        "predicted_k": 130.7,
+        "ci_low_k": 118.4,
+        "ci_high_k": 142.9,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 103.6,
+        "ci_low_k": 90.3,
+        "ci_high_k": 116.9,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 92.6,
+        "ci_low_k": 40.0,
+        "ci_high_k": 145.2,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 72.5,
+        "ci_low_k": 43.4,
+        "ci_high_k": 101.7,
+        "retention": 0.403
+      }
+    },
+    "200k": {
+      "issue2": 200000,
+      "issue6": {
+        "predicted_k": 145.2,
+        "ci_low_k": 131.6,
+        "ci_high_k": 158.8,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 115.1,
+        "ci_low_k": 100.3,
+        "ci_high_k": 129.8,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 102.9,
+        "ci_low_k": 44.5,
+        "ci_high_k": 161.4,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 80.6,
+        "ci_low_k": 48.2,
+        "ci_high_k": 113.0,
+        "retention": 0.403
+      }
+    },
+    "220k": {
+      "issue2": 220000,
+      "issue6": {
+        "predicted_k": 159.7,
+        "ci_low_k": 144.8,
+        "ci_high_k": 174.7,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 126.6,
+        "ci_low_k": 110.4,
+        "ci_high_k": 142.8,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 113.2,
+        "ci_low_k": 48.9,
+        "ci_high_k": 177.5,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 88.7,
+        "ci_low_k": 53.0,
+        "ci_high_k": 124.3,
+        "retention": 0.403
+      }
+    },
+    "250k": {
+      "issue2": 250000,
+      "issue6": {
+        "predicted_k": 181.5,
+        "ci_low_k": 164.5,
+        "ci_high_k": 198.5,
+        "retention": 0.726
+      },
+      "issue12": {
+        "predicted_k": 143.9,
+        "ci_low_k": 125.4,
+        "ci_high_k": 162.3,
+        "retention": 0.575
+      },
+      "issue24": {
+        "predicted_k": 128.7,
+        "ci_low_k": 55.6,
+        "ci_high_k": 201.7,
+        "retention": 0.515
+      },
+      "issue36": {
+        "predicted_k": 100.8,
+        "ci_low_k": 60.3,
+        "ci_high_k": 141.2,
+        "retention": 0.403
+      }
+    }
+  }
+}

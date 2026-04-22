@@ -271,6 +271,137 @@ def render():
         "strong vs. weak contrast; including them does not materially change the result."
     )
 
+    # --- Sensitivity Analysis ---
+    st.markdown("<br>", unsafe_allow_html=True)
+    section_heading("Does the Gap Hold Under Scrutiny?")
+
+    prose("""
+    <p>
+    The Strong / Moderate / Weak classifications are author judgment calls — reasonable people can
+    disagree on the edge cases. Below are the six films closest to their category boundaries:
+    the three lowest-scoring <strong>Strong</strong> films and the three highest-scoring
+    <strong>Weak</strong> films. Reclassify any of them and the statistics update live.
+    If the signal is real, it should survive reasonable disagreement about the borderline cases.
+    </p>
+    """)
+
+    # Identify borderline films dynamically from the data
+    strong_boundary = (
+        df[df["source_quality"] == "Strong"]
+        .nsmallest(3, "rt_score")[["film_title", "rt_score", "source_quality", "year"]]
+    )
+    weak_boundary = (
+        df[df["source_quality"] == "Weak"]
+        .nlargest(3, "rt_score")[["film_title", "rt_score", "source_quality", "year"]]
+    )
+    borderline_df = pd.concat([strong_boundary, weak_boundary]).reset_index(drop=True)
+
+    # Session state — stores user overrides keyed by film title
+    if "source_overrides" not in st.session_state:
+        st.session_state["source_overrides"] = {}
+
+    # Header labels
+    st.markdown(
+        '<p style="font-size:0.75rem;color:#555;font-family:\'Courier New\',monospace;">'
+        'STRONG SOURCE — lowest scoring &nbsp;&nbsp;|&nbsp;&nbsp; WEAK SOURCE — highest scoring'
+        '</p>',
+        unsafe_allow_html=True,
+    )
+
+    # Reclassification widgets — 3 columns
+    cols = st.columns(3)
+    any_changed = False
+    for i, (_, row) in enumerate(borderline_df.iterrows()):
+        with cols[i % 3]:
+            original  = row["source_quality"]
+            saved     = st.session_state["source_overrides"].get(row["film_title"], original)
+            new_val   = st.selectbox(
+                f"{row['film_title']}  ({row['rt_score']}%)",
+                ["Strong", "Moderate", "Weak"],
+                index=["Strong", "Moderate", "Weak"].index(saved),
+                key=f"sa_{i}",
+            )
+            st.session_state["source_overrides"][row["film_title"]] = new_val
+            if new_val != original:
+                any_changed = True
+                st.caption(f"← originally **{original}**")
+
+    reset_col, _ = st.columns([1, 5])
+    with reset_col:
+        if st.button("↺  Reset", key="sa_reset"):
+            st.session_state["source_overrides"] = {}
+            st.rerun()
+
+    # Apply overrides to a working copy of the dataframe
+    df_adj = df.copy()
+    for film, quality in st.session_state["source_overrides"].items():
+        df_adj.loc[df_adj["film_title"] == film, "source_quality"] = quality
+
+    # Recompute statistics on adjusted classifications
+    strong_adj = df_adj[df_adj["source_quality"] == "Strong"]["rt_score"].values
+    weak_adj   = df_adj[df_adj["source_quality"] == "Weak"]["rt_score"].values
+
+    gap_adj      = np.mean(strong_adj) - np.mean(weak_adj)
+    t_adj, p_adj = stats.ttest_ind(strong_adj, weak_adj, equal_var=False)
+    pooled_adj   = np.sqrt((np.std(strong_adj, ddof=1) ** 2 + np.std(weak_adj, ddof=1) ** 2) / 2)
+    d_adj        = (np.mean(strong_adj) - np.mean(weak_adj)) / pooled_adj
+    p_adj_str    = "p < 0.001" if p_adj < 0.001 else (
+                   f"p = {p_adj:.3f}" if p_adj < 0.01 else f"p = {p_adj:.2f}")
+
+    gap_delta = gap_adj - gap
+    d_delta   = d_adj - cohens_d
+
+    # Side-by-side: original vs adjusted
+    st.markdown("<br>", unsafe_allow_html=True)
+    col_orig, col_adj = st.columns(2)
+
+    with col_orig:
+        st.markdown(
+            '<p style="font-size:0.75rem;color:#666;font-family:\'Courier New\',monospace;'
+            'text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0;">Original</p>',
+            unsafe_allow_html=True,
+        )
+        stat_cards([
+            (f"+{gap:.0f} pts",     "RT gap"),
+            (p_display,              "p-value"),
+            (f"d = {cohens_d:.2f}", "Cohen's d"),
+        ])
+
+    with col_adj:
+        adj_color = "#6fbf7a" if gap_adj >= gap - 2 else "#e8b84b" if gap_adj >= 15 else "#e23636"
+        adj_label = "Your version" if any_changed else "Your version  (unchanged)"
+        st.markdown(
+            f'<p style="font-size:0.75rem;color:{adj_color};font-family:\'Courier New\',monospace;'
+            f'text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0;">{adj_label}</p>',
+            unsafe_allow_html=True,
+        )
+        stat_cards([
+            (f"+{gap_adj:.0f} pts", f"RT gap  ({gap_delta:+.0f})"),
+            (p_adj_str,              "p-value"),
+            (f"d = {d_adj:.2f}",    f"Cohen's d  ({d_delta:+.2f})"),
+        ])
+
+    # Dynamic annotation that responds to the current adjusted state
+    still_sig   = p_adj < 0.05
+    still_large = d_adj >= 0.8
+    gap_note    = (
+        "holds above 20 points" if gap_adj >= 20
+        else "narrows but remains meaningful" if gap_adj >= 12
+        else "drops substantially under this reclassification"
+    )
+    chart_annotation(
+        f"With your current classification, the source quality gap {gap_note} "
+        f"({gap_adj:.0f} pts, {p_adj_str}). "
+        + (f"Cohen's d of {d_adj:.2f} {'remains' if still_large else 'drops below'} "
+           f"the large-effect threshold of 0.8. " )
+        + ("The gap is statistically significant under this reclassification. "
+           if still_sig else
+           "Statistical significance is lost under this reclassification — worth noting. ")
+        + ("Try moving all six films to their opposite category to find the breaking point."
+           if not any_changed else
+           "The argument is most credible when it survives the most skeptical classification you can construct.")
+    )
+
     # --- Chart 3: Phase average over time ---
     st.markdown("<br>", unsafe_allow_html=True)
     section_heading("Average RT Score by Phase: A Downward Trend")
