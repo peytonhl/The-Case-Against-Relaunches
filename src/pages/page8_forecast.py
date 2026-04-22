@@ -26,11 +26,11 @@ ISSUE_POINTS  = [2, 6, 12, 24, 36]
 
 # Colours for historical volume lines
 VOL_COLORS = {
-    2: "#555555",   # 1999 — greyed out (different era)
+    2: "#555555",   # 1999 greyed out (different era)
     3: "#7799cc",   # 2014 Slott
     4: "#77aadd",   # 2015 Slott
-    5: "#6fbf7a",   # 2018 Spencer (best performer — highlight)
-    6: "#e8b84b",   # 2022 Wells (PRH estimate — caution colour)
+    5: "#6fbf7a",   # 2018 Spencer (best performer)
+    6: "#e8b84b",   # 2022 Wells (PRH estimate)
 }
 
 SCENARIO_COLOR = "#e23636"
@@ -102,12 +102,12 @@ def render():
     prose("""
     <p>
     Every Amazing Spider-Man relaunch follows a predictable arc: a spike at launch,
-    then decay. The rate of that decay is surprisingly stable across volumes — and
+    then decay. The rate of that decay is surprisingly stable across volumes, and
     that stability makes it possible to model.
     </p>
     <p>
     This tool uses <strong>mean retention rates</strong> computed across all five
-    ASM relaunch volumes (1999–2022). Enter a hypothetical issue #2 opening and
+    ASM relaunch volumes (1999-2022). Enter a hypothetical issue #2 opening and
     the model projects the expected readership at issues #6, #12, #24, and #36,
     along with 95% confidence intervals derived from the historical variance.
     </p>
@@ -125,7 +125,7 @@ def render():
             value=120,
             step=5,
             key="forecast_baseline",
-            help="Use issue #2 (not #1) — the first standard-cover issue, free of variant inflation."
+            help="Use issue #2 (not #1): the first standard-cover issue, free of variant inflation."
         )
 
     baseline = baseline_k * 1000
@@ -140,7 +140,7 @@ def render():
         if p is None:
             continue
         ret_key = str(ISSUE_POINTS[i])
-        ret_pct = f"{retention[ret_key]['mean']*100:.0f}% of #2" if ret_key in retention else "—"
+        ret_pct = f"{retention[ret_key]['mean']*100:.0f}% of #2" if ret_key in retention else "n/a"
         p_k  = f"{p/1000:.1f}k"
         lo_k = f"{lo/1000:.1f}k"
         hi_k = f"{hi/1000:.1f}k"
@@ -187,7 +187,7 @@ def render():
                     x_pts.append(pt)
                     y_pts.append(vt[k] * 1000)
             dash_style = "dot" if vol_num == 2 else "dash"
-            label = f"Vol.{vol_num} ({vt['year']}) — {vt['writer']}"
+            label = f"Vol.{vol_num} ({vt['year']}) {vt['writer']}"
             fig.add_trace(go.Scatter(
                 x=x_pts, y=y_pts,
                 mode="lines+markers",
@@ -222,7 +222,7 @@ def render():
         hovertemplate="Issue #%{x}: <b>%{y:,.0f}</b><extra></extra>",
     ))
 
-    # Annotate floor at issue 12
+    # Annotate floor at issue 12, raised above the line
     if pred[2] is not None:
         fig.add_annotation(
             x=12, y=pred[2],
@@ -230,10 +230,12 @@ def render():
             showarrow=False,
             font=dict(color="#e23636", family="Bangers, cursive", size=14),
             xanchor="left",
+            yshift=22,
         )
 
     fig.update_layout(**dict(PLOTLY_LAYOUT))
     fig.update_layout(
+        title=dict(text=""),
         height=460,
         margin=dict(t=40, b=50, l=70, r=30),
         xaxis=dict(
@@ -269,7 +271,7 @@ def render():
 
     prose("""
     <p>
-    The forecast is anchored on historical retention rates — how much readership survives
+    The forecast is anchored on historical retention rates: how much readership survives
     at each issue milestone, expressed as a fraction of the issue #2 baseline.
     These rates are the most robust signal in the data; they are largely independent of
     the opening baseline.
@@ -310,8 +312,9 @@ def render():
 
     ret_fig.update_layout(**dict(PLOTLY_LAYOUT))
     ret_fig.update_layout(
+        title=dict(text="Historical Retention by Issue Milestone"),
         height=320,
-        margin=dict(t=30, b=40, l=60, r=30),
+        margin=dict(t=45, b=40, l=60, r=30),
         yaxis=dict(
             title="Retention (% of issue #2)",
             ticksuffix="%",
@@ -335,11 +338,11 @@ def render():
     </p>
     <ul style="color:#d4d4d4;font-family:Georgia,serif;font-size:1.05rem;line-height:1.85;max-width:760px;">
     <li>By issue #12, the run will have shed roughly
-        <strong>{(1 - ret12)*100:.0f}% of its launch readership</strong> — down to
+        <strong>{(1 - ret12)*100:.0f}% of its launch readership</strong>, down to
         an estimated <strong>{pred[2]/1000:.0f}k copies</strong>.
         This is before any story arc has had time to compound.</li>
     <li>By issue #24, the baseline is
-        <strong>{pred[3]/1000:.0f}k</strong> — barely above the floor typically
+        <strong>{pred[3]/1000:.0f}k</strong>, barely above the floor typically
         needed to justify a title's continuation at major publishers.</li>
     <li>These numbers are a ceiling estimate under current relaunch-cycle conditions.
         They assume the launch has no structural problems (no mid-run creative change,

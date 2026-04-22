@@ -257,7 +257,7 @@ def render():
         f"The confidence intervals do not overlap: strong-source films fall in the "
         f"{strong_ci[0]:.0f}–{strong_ci[1]:.0f}% range with 95% confidence; "
         f"weak-source films in the {weak_ci[0]:.0f}–{weak_ci[1]:.0f}% range. "
-        f"Cohen's d of {cohens_d:.2f} is a {d_label} effect — well above the 0.8 threshold "
+        f"Cohen's d of {cohens_d:.2f} is a {d_label} effect, well above the 0.8 threshold "
         f"conventionally used to flag a practically meaningful difference, not just a "
         f"statistically detectable one. The sample is small (~30 films), but the signal is strong."
     )
@@ -277,7 +277,7 @@ def render():
 
     prose("""
     <p>
-    The Strong / Moderate / Weak classifications are author judgment calls — reasonable people can
+    The Strong / Moderate / Weak classifications are author judgment calls; reasonable people can
     disagree on the edge cases. Below are the six films closest to their category boundaries:
     the three lowest-scoring <strong>Strong</strong> films and the three highest-scoring
     <strong>Weak</strong> films. Reclassify any of them and the statistics update live.
@@ -296,19 +296,19 @@ def render():
     )
     borderline_df = pd.concat([strong_boundary, weak_boundary]).reset_index(drop=True)
 
-    # Session state — stores user overrides keyed by film title
+    # Session state stores user overrides keyed by film title
     if "source_overrides" not in st.session_state:
         st.session_state["source_overrides"] = {}
 
     # Header labels
     st.markdown(
         '<p style="font-size:0.75rem;color:#555;font-family:\'Courier New\',monospace;">'
-        'STRONG SOURCE — lowest scoring &nbsp;&nbsp;|&nbsp;&nbsp; WEAK SOURCE — highest scoring'
+        'STRONG SOURCE: lowest scoring &nbsp;&nbsp;|&nbsp;&nbsp; WEAK SOURCE: highest scoring'
         '</p>',
         unsafe_allow_html=True,
     )
 
-    # Reclassification widgets — 3 columns
+    # Reclassification widgets, 3 columns
     cols = st.columns(3)
     any_changed = False
     for i, (_, row) in enumerate(borderline_df.iterrows()):
@@ -396,7 +396,7 @@ def render():
            f"the large-effect threshold of 0.8. " )
         + ("The gap is statistically significant under this reclassification. "
            if still_sig else
-           "Statistical significance is lost under this reclassification — worth noting. ")
+           "Statistical significance is lost under this reclassification, worth noting. ")
         + ("Try moving all six films to their opposite category to find the breaking point."
            if not any_changed else
            "The argument is most credible when it survives the most skeptical classification you can construct.")

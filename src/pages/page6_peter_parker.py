@@ -24,7 +24,7 @@ FRANCHISE_SYMBOLS = {
     "Thor":            "triangle-up",
 }
 
-# Civilian story index — estimated % of narrative pages/screen time
+# Civilian story index - estimated % of narrative pages/screen time
 # devoted to the hero's civilian identity (not masked, costumed, or supernatural)
 # Author estimate; see Appendix for methodology note
 CIVILIAN_INDEX = [
@@ -33,7 +33,7 @@ CIVILIAN_INDEX = [
     ("Hulk / Banner",   26, "Banner explored but Hulk dominates page count"),
     ("Iron Man",        38, "Tony Stark persona central to tone and plot"),
     ("Daredevil",       46, "Matt Murdock's legal career woven throughout"),
-    ("Spider-Man",      58, "Peter Parker: school, work, family, grief — co-lead"),
+    ("Spider-Man",      58, "Peter Parker: school, work, family, grief (co-lead)"),
 ]
 
 # Distinct solo media appearances by format (animated series, live-action TV,
@@ -81,7 +81,7 @@ def render():
     page_header(
         kicker="Section 03",
         title="The Peter Parker Effect",
-        subtitle="Why the alter ego is the asset — and what that means for the catalog."
+        subtitle="Why the alter ego is the asset, and what that means for the catalog."
     )
 
     prose("""

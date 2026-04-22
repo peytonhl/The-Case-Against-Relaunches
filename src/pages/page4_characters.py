@@ -194,7 +194,7 @@ def render():
         "These are characters being developed for the screen at the same time they're being developed on the page. "
         "The compression is not random. Characters created in the 1960s and 70s arrived with 40–70 years of story capital. "
         "Characters created after 2000 arrived with under 25. Characters created in the 2010s arrived with under 12. "
-        "Each generation of MCU characters has had less accumulated story to draw from than the last — "
+        "Each generation of MCU characters has had less accumulated story to draw from than the last: "
         "a direct consequence of a publishing model that has spent 25 years relaunching existing titles "
         "instead of building new long-form character development from the ground up."
     )
@@ -275,13 +275,13 @@ def render():
         # Color bars: highlight the outlier tiers
         def bar_color(count):
             if count >= 10000:
-                return "#e23636"    # red — dominant
+                return "#e23636"    # red - dominant
             elif count >= 5000:
-                return "#e8b84b"    # gold — deep
+                return "#e8b84b"    # gold - deep
             elif count >= 2000:
-                return "#5b8dbf"    # blue — established
+                return "#5b8dbf"    # blue - established
             else:
-                return "#555"       # grey — limited
+                return "#555"       # grey - limited
 
         colors = [bar_color(c) for c in cv_df["count_of_issue_appearances"]]
         emoji_labels = [CHARACTER_EMOJI.get(c, "") for c in cv_df["character"]]
@@ -334,11 +334,11 @@ def render():
         st.plotly_chart(fig4, use_container_width=True)
 
         chart_annotation(
-            "Spider-Man has appeared in 17,970 tracked issues — nearly 6,000 more than "
+            "Spider-Man has appeared in 17,970 tracked issues, nearly 6,000 more than "
             "Captain America (12,218), and more than five times Iron Man (11,699). "
             "Black Panther, at 3,612, has substantial depth by any reasonable measure. "
             "Contrast that with Star-Lord (908), Thanos (1,323), and Rocket Raccoon (1,102). "
-            "These characters are not thin — but they are drawing on a much shallower well. "
+            "These characters are not thin, but they are drawing on a much shallower well. "
             "When the MCU adapts them, it is working from a shorter source text. "
             "Issue appearance volume is a proxy for narrative depth: the more issues a character "
             "has anchored, the richer the mythology of villains, supporting casts, and earned arcs "

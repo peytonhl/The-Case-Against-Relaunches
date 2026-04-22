@@ -221,7 +221,7 @@ def render():
 
     fig2 = go.Figure()
 
-    # #1 bars (faded — speculator inflated)
+    # #1 bars (faded - speculator inflated)
     fig2.add_trace(go.Bar(
         name="Issue #1 (variant-inflated)",
         x=issue_ones["label"],
@@ -237,7 +237,7 @@ def render():
         ),
     ))
 
-    # #2 bars (solid — real readership)
+    # #2 bars (solid - real readership)
     fig2.add_trace(go.Bar(
         name="Issue #2 (readership baseline)",
         x=issue_twos["label"],
