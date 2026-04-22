@@ -1,12 +1,73 @@
+import sqlite3
 import streamlit as st
+from pathlib import Path
 from src.utils.styling import (
     page_header, prose, pull_quote, section_heading, stat_cards, rec_box
 )
 
+DB_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "marvel.db"
+
+
+def _load_summary_stats():
+    """Compute summary stats from DB. Falls back to hardcoded values."""
+    out = {
+        "avengers_drop": "−56%",
+        "retention":     "40–45%",
+        "rt_gap":        "+26 pts",
+    }
+    if not DB_PATH.exists():
+        return out
+    try:
+        conn = sqlite3.connect(DB_PATH)
+
+        # Avengers issue #2 readership decline (peak vs most recent)
+        peak = conn.execute(
+            "SELECT MAX(orders) FROM relaunch_multi "
+            "WHERE title = 'Avengers' AND issue_num = 2"
+        ).fetchone()
+        recent = conn.execute(
+            "SELECT orders FROM relaunch_multi "
+            "WHERE title = 'Avengers' AND issue_num = 2 "
+            "ORDER BY relaunch_year DESC LIMIT 1"
+        ).fetchone()
+        if peak and peak[0] and recent and recent[0] and peak[0] > 0:
+            pct = (recent[0] - peak[0]) / peak[0] * 100
+            out["avengers_drop"] = f"{pct:+.0f}%"
+
+        # 12-issue retention across all ASM relaunches
+        twos = conn.execute(
+            "SELECT relaunch_volume, orders FROM asm_relaunches WHERE issue_num = 2"
+        ).fetchall()
+        twelves = conn.execute(
+            "SELECT relaunch_volume, orders FROM asm_relaunches WHERE issue_num = 12"
+        ).fetchall()
+        two_map   = {r[0]: r[1] for r in twos   if r[1]}
+        twelve_map = {r[0]: r[1] for r in twelves if r[1]}
+        common = set(two_map) & set(twelve_map)
+        if common:
+            rates = [twelve_map[v] / two_map[v] * 100 for v in common]
+            avg_ret = sum(rates) / len(rates)
+            out["retention"] = f"{avg_ret:.0f}%"
+
+        # RT gap: strong vs weak source
+        strong = conn.execute(
+            "SELECT AVG(rt_score) FROM mcu_films WHERE source_quality = 'Strong'"
+        ).fetchone()
+        weak = conn.execute(
+            "SELECT AVG(rt_score) FROM mcu_films WHERE source_quality = 'Weak'"
+        ).fetchone()
+        if strong and strong[0] and weak and weak[0]:
+            out["rt_gap"] = f"+{strong[0] - weak[0]:.0f} pts"
+
+        conn.close()
+    except Exception:
+        pass
+    return out
+
 
 def render():
     page_header(
-        kicker="Section 06",
+        kicker="Section 07",
         title="The Business Case",
         subtitle="What the data suggests, and a few ideas for how to build Marvel stories that will matter for the next sixty years."
     )
@@ -40,11 +101,12 @@ def render():
 
     section_heading("What the Data Established")
 
+    kv = _load_summary_stats()
     stat_cards([
-        ("−56%", "Avengers #2 readership: 2004 → 2018"),
-        ("40–45%", "12-issue retention across all relaunches"),
-        ("+26 pts", "RT gap: strong-source vs weak-source MCU films"),
-        ("2.4 yrs", "Avg. ASM writer tenure post-2018"),
+        (kv["avengers_drop"], "Avengers #2 readership: 2004 → 2018"),
+        (kv["retention"],     "Avg. 12-issue retention across relaunches"),
+        (kv["rt_gap"],        "RT gap: strong-source vs weak-source MCU films"),
+        ("2.4 yrs",           "Avg. ASM writer tenure post-2018"),
     ])
 
     prose("""

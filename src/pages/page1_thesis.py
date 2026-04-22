@@ -105,40 +105,6 @@ def render():
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    prose("""
-    <p>
-    <strong>First:</strong> The relaunch cycle's costs are not evenly distributed.
-    Amazing Spider-Man has held its core readership with remarkable consistency, around
-    110–125k at issue #2 across five relaunches spanning 25 years. Spider-Man is resilient enough
-    to absorb the reset. The Avengers line is not: 153k at issue #2 in 2004, down to 67k by 2018,
-    a 56% decline in sustained readership across four relaunch cycles. Daredevil is down 43% from
-    its late-90s baseline. The difference is not creative quality. Daredevil had Miller, Bendis,
-    and Waid, three of the strongest sustained runs in Marvel's catalog. The difference is that
-    readers are invested in <em>Peter Parker</em>, not just Spider-Man. The alter-ego depth that
-    makes ASM resilient is precisely what the rest of the catalog lacks, and what long-form
-    development is best positioned to build.
-    </p>
-    <p>
-    <strong>Second:</strong> Writer tenures on Amazing Spider-Man have compressed significantly.
-    Lee, Conway, Michelinie, Straczynski: the runs that defined Spider-Man as a cultural force
-    were built by writers given 40 to 153 issues to develop their vision. The post-2018 average
-    is 57 issues across two relaunches. The characters that became cultural phenomena, Venom,
-    the Hobgoblin, the black costume arc, were built slowly. That kind of development requires runway.
-    </p>
-    <p>
-    <strong>Third:</strong> MCU films built on deep comic source material average ~90% on Rotten
-    Tomatoes. Films built on thinner source material average in the mid-60s. That 26-point gap
-    holds across phases and genres. The franchise's strongest creative period correlates directly
-    with its deepest source material, and the comics being written today are the source material
-    for whatever comes next.
-    </p>
-    <p>
-    The sections that follow present the data behind each of these findings, and close with a set
-    of concrete recommendations for how the publishing model might evolve to keep building the
-    kind of story depth that has defined Marvel at its best.
-    </p>
-    """)
-
     st.markdown("<br>", unsafe_allow_html=True)
     section_heading("What the Relaunch Gets Right")
 

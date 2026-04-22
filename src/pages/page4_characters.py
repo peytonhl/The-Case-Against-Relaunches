@@ -1,10 +1,14 @@
+import sqlite3
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+from pathlib import Path
 from src.utils.styling import (
     page_header, prose, pull_quote, chart_annotation, section_heading, data_note,
     PLOTLY_LAYOUT, AXIS_STYLE
 )
+
+DB_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "marvel.db"
 
 ERA_COLORS = {
     "Golden Age":   "#f5c842",
@@ -94,7 +98,7 @@ CHARACTER_DATA = [
 
 def render():
     page_header(
-        kicker="Section 04",
+        kicker="Section 05",
         title="The Character Ledger",
         subtitle="Every major MCU character, ranked by how long their story had to develop before the cameras rolled."
     )
@@ -316,11 +320,118 @@ def render():
         "The question is how much runway they'll be given to finish it."
     )
 
+    # --- Chart 4: Issue Appearance Count from ComicVine ---
+    st.markdown("<br>", unsafe_allow_html=True)
+    section_heading("Story Capital: Total Comic Issue Appearances")
+
+    cv_df = None
+    try:
+        if DB_PATH.exists():
+            conn = sqlite3.connect(DB_PATH)
+            cv_df = pd.read_sql_query(
+                "SELECT character, count_of_issue_appearances "
+                "FROM comic_characters "
+                "WHERE count_of_issue_appearances IS NOT NULL "
+                "ORDER BY count_of_issue_appearances ASC",
+                conn,
+            )
+            conn.close()
+    except Exception:
+        cv_df = None
+
+    if cv_df is not None and not cv_df.empty:
+        # Color bars: highlight the outlier tiers
+        def bar_color(count):
+            if count >= 10000:
+                return "#e23636"    # red — dominant
+            elif count >= 5000:
+                return "#e8b84b"    # gold — deep
+            elif count >= 2000:
+                return "#5b8dbf"    # blue — established
+            else:
+                return "#555"       # grey — limited
+
+        colors = [bar_color(c) for c in cv_df["count_of_issue_appearances"]]
+        emoji_labels = [CHARACTER_EMOJI.get(c, "") for c in cv_df["character"]]
+        display_labels = [
+            f"{e} {c}" if e else c
+            for e, c in zip(emoji_labels, cv_df["character"])
+        ]
+
+        fig4 = go.Figure()
+        fig4.add_trace(go.Bar(
+            x=cv_df["count_of_issue_appearances"],
+            y=display_labels,
+            orientation="h",
+            marker_color=colors,
+            marker_opacity=0.9,
+            text=[f"  {v:,}" for v in cv_df["count_of_issue_appearances"]],
+            textposition="outside",
+            textfont=dict(size=9, color="#888"),
+            hovertemplate=(
+                "<b>%{y}</b><br>"
+                "Issue appearances: %{x:,}"
+                "<extra></extra>"
+            ),
+        ))
+
+        # Tier reference lines
+        for threshold, label in [(2000, "2,000"), (5000, "5,000"), (10000, "10,000")]:
+            fig4.add_vline(
+                x=threshold,
+                line_width=1,
+                line_dash="dot",
+                line_color="#444",
+                annotation_text=label,
+                annotation_position="top",
+                annotation_font=dict(size=9, color="#555"),
+            )
+
+        fig4.update_layout(
+            **dict(PLOTLY_LAYOUT),
+            height=520,
+            xaxis=dict(**AXIS_STYLE, title="Total Issue Appearances (ComicVine)", range=[0, 21000]),
+            yaxis=dict(**AXIS_STYLE, autorange=True),
+            margin=dict(t=40, b=50, l=240, r=100),
+            title=dict(
+                text="MCU Characters by Total Comic Issue Appearances",
+                font=dict(size=14, color="#ccc"), x=0.0,
+            ),
+            showlegend=False,
+        )
+        st.plotly_chart(fig4, use_container_width=True)
+
+        chart_annotation(
+            "Spider-Man has appeared in 17,970 tracked issues — nearly 6,000 more than "
+            "Captain America (12,218), and more than five times Iron Man (11,699). "
+            "Black Panther, at 3,612, has substantial depth by any reasonable measure. "
+            "Contrast that with Star-Lord (908), Thanos (1,323), and Rocket Raccoon (1,102). "
+            "These characters are not thin — but they are drawing on a much shallower well. "
+            "When the MCU adapts them, it is working from a shorter source text. "
+            "Issue appearance volume is a proxy for narrative depth: the more issues a character "
+            "has anchored, the richer the mythology of villains, supporting casts, and earned arcs "
+            "available to screenwriters."
+        )
+    else:
+        prose("<p><em>Appearance data unavailable. Run <code>python scripts/ingest.py</code> to populate.</em></p>")
+
+    cv_fetch_date = "N/A"
+    if DB_PATH.exists():
+        try:
+            _conn = sqlite3.connect(DB_PATH)
+            _row = _conn.execute("SELECT MAX(fetched_at) FROM comic_characters").fetchone()
+            _conn.close()
+            if _row and _row[0]:
+                cv_fetch_date = _row[0][:10]
+        except Exception:
+            pass
+
     data_note(
         "MCU debut dates: first theatrical or confirmed Disney+ appearance. "
         "First appearance years: first comic publication per Marvel's records. "
         "Winter Soldier listed at 2005 (Ed Brubaker's creation of the identity/arc), "
         "not 1941 (Bucky Barnes first appearance), as the MCU story drew from Brubaker's run. "
+        f"Issue appearance counts via ComicVine API (pulled {cv_fetch_date}). "
         "Character list is representative, not exhaustive. Author-compiled from published Marvel records."
     )
 

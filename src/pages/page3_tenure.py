@@ -44,7 +44,7 @@ LANDMARK_RUNS = {
 
 def render():
     page_header(
-        kicker="Section 03",
+        kicker="Section 04",
         title="Writer Tenure Analysis",
         subtitle="Amazing Spider-Man, 1963 – 2024: how long creators were trusted to tell a story."
     )

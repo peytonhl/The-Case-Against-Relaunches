@@ -1,0 +1,19 @@
+character,film_title,year,continuity,worldwide_gross_m,rt_score,note
+Spider-Man,Spider-Man,2002,Raimi,821,90,
+Spider-Man,Spider-Man 2,2004,Raimi,789,93,
+Spider-Man,Spider-Man 3,2007,Raimi,891,63,
+Spider-Man,The Amazing Spider-Man,2012,Webb,758,73,
+Spider-Man,The Amazing Spider-Man 2,2014,Webb,709,52,
+Spider-Man,Spider-Man: Homecoming,2017,MCU,880,92,
+Spider-Man,Spider-Man: Far From Home,2019,MCU,1132,91,
+Spider-Man,Spider-Man: No Way Home,2021,MCU,1901,93,
+Iron Man,Iron Man,2008,MCU,585,94,
+Iron Man,Iron Man 2,2010,MCU,624,72,
+Iron Man,Iron Man 3,2013,MCU,1215,79,Released 12 months after The Avengers
+Captain America,The First Avenger,2011,MCU,371,80,
+Captain America,The Winter Soldier,2014,MCU,714,90,
+Captain America,Civil War,2016,MCU,1153,91,Ensemble cast of 12 MCU characters
+Thor,Thor,2011,MCU,449,77,
+Thor,The Dark World,2013,MCU,645,66,
+Thor,Ragnarok,2017,MCU,854,93,
+Thor,Love and Thunder,2022,MCU,761,63,

@@ -1,14 +1,15 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-import os
+import numpy as np
+import sqlite3
+from pathlib import Path
 from src.utils.styling import (
     page_header, prose, pull_quote, chart_annotation, section_heading,
     stat_cards, data_note, PLOTLY_LAYOUT, AXIS_STYLE
 )
 
-DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "asm_relaunches.csv")
-MULTI_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "relaunch_multi.csv")
+DB_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "marvel.db"
 
 VOLUME_META = {
     2: {"label": "Vol. 2 (1999)", "color": "#e8b84b", "writer": "Howard Mackie"},
@@ -35,9 +36,14 @@ CONFIDENCE_OPACITY = {
 
 
 def load_data():
-    path = os.path.normpath(DATA_PATH)
-    if os.path.exists(path):
-        return pd.read_csv(path)
+    if DB_PATH.exists():
+        try:
+            conn = sqlite3.connect(DB_PATH)
+            df = pd.read_sql_query("SELECT * FROM asm_relaunches", conn)
+            conn.close()
+            return df
+        except Exception:
+            pass
     return pd.DataFrame()
 
 
@@ -71,8 +77,7 @@ def render():
 
     if df.empty:
         st.warning(
-            "⚠ Sales data not found. Expected: `data/asm_relaunches.csv`\n\n"
-            "CSV schema: `relaunch_volume, relaunch_year, writer, issue_num, orders, data_confidence, notes`"
+            "⚠ Sales data not found. Run `python scripts/ingest.py` to populate the database."
         )
         return
 
@@ -122,6 +127,37 @@ def render():
             customdata=conf_vals,
         ))
 
+    # --- OLS trend lines per volume ---
+    decay_stats = {}
+    for vol, meta in VOLUME_META.items():
+        subset = df_main[
+            (df_main["relaunch_volume"] == vol) &
+            (df_main["issue_num"] >= 2) &
+            (~df_main["data_confidence"].isin(["Estimate", "PRH Estimate"]))
+        ].sort_values("issue_num")
+        if len(subset) < 3:
+            continue
+        x = subset["issue_num"].values
+        y = (subset["orders"] / 1000).values
+        coeffs = np.polyfit(x, y, 1)          # slope, intercept
+        y_hat  = np.polyval(coeffs, x)
+        ss_res = np.sum((y - y_hat) ** 2)
+        ss_tot = np.sum((y - np.mean(y)) ** 2)
+        r2     = 1 - ss_res / ss_tot if ss_tot > 0 else 0
+        slope  = coeffs[0]                    # thousands of copies per issue
+        x_line = np.linspace(x.min(), x.max(), 80)
+        y_line = np.polyval(coeffs, x_line)
+        decay_stats[vol] = {"slope": slope, "r2": r2, "label": meta["label"]}
+        fig1.add_trace(go.Scatter(
+            x=x_line, y=y_line,
+            mode="lines",
+            name=f"{meta['label']} trend",
+            line=dict(color=meta["color"], width=1, dash="dot"),
+            opacity=0.45,
+            showlegend=False,
+            hoverinfo="skip",
+        ))
+
     layout1 = dict(PLOTLY_LAYOUT)
     fig1.update_layout(
         **layout1,
@@ -149,12 +185,22 @@ def render():
 
     st.plotly_chart(fig1, use_container_width=True)
 
+    # Build decay summary for annotation
+    decay_lines = []
+    for vol in sorted(decay_stats):
+        d = decay_stats[vol]
+        decay_lines.append(
+            f"{d['label']}: {d['slope']*-1:.2f}k copies/issue lost (R²={d['r2']:.2f})"
+        )
+    decay_summary = " · ".join(decay_lines)
+
     chart_annotation(
-        "Using issue #2 as the baseline removes the distortion of variant speculation "
-        "and shows the real opening readership for each run. "
-        "Vol. 4 (2015) and Vol. 5 (2018) both opened around 111–114k readers at issue #2, "
-        "essentially flat. Both runs then fell to similar floors by issue 12 (~75–76k), "
-        "meaning sustained readership is neither growing nor recovering between relaunches. "
+        "Dotted lines show OLS trend fits for each run (confirmed data only). "
+        "The slope quantifies the rate of sustained readership decay per issue. "
+        + (f"Decay rates: {decay_summary}. " if decay_summary else "")
+        + "Vol. 4 (2015) and Vol. 5 (2018) both opened around 111–114k readers at issue #2, "
+        "essentially flat across relaunch cycles. Both fell to similar floors by issue 12 (~75–76k). "
+        "R² values above 0.7 indicate a consistent linear decay rather than random noise. "
         "Solid circles are confirmed Comichron figures; hollow circles are estimates or "
         "PRH-normalized approximations. Full confidence data is in the Appendix."
     )
@@ -347,11 +393,17 @@ def render():
     </p>
     """)
 
-    multi_path = os.path.normpath(MULTI_PATH)
-    if not os.path.exists(multi_path):
-        st.warning("Multi-title data not found. Expected: `data/relaunch_multi.csv`")
+    mdf = pd.DataFrame()
+    if DB_PATH.exists():
+        try:
+            conn = sqlite3.connect(DB_PATH)
+            mdf = pd.read_sql_query("SELECT * FROM relaunch_multi", conn)
+            conn.close()
+        except Exception:
+            pass
+    if mdf.empty:
+        st.warning("Multi-title data not found. Run `python scripts/ingest.py` to populate the database.")
     else:
-        mdf = pd.read_csv(multi_path)
 
         TITLE_COLORS = {
             "Amazing Spider-Man": "#e23636",
