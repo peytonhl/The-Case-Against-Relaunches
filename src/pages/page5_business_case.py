@@ -105,7 +105,7 @@ def render():
     stat_cards([
         (kv["avengers_drop"], "Avengers #2 readership: 2004 → 2018"),
         (kv["retention"],     "Avg. 12-issue retention across relaunches"),
-        (kv["rt_gap"],        "RT gap: strong-source vs weak-source MCU films"),
+        (kv["rt_gap"],        "RT score gap: strong vs. weak comic source material"),
         ("2.4 yrs",           "Avg. ASM writer tenure post-2018"),
     ])
 

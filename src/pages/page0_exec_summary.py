@@ -11,7 +11,7 @@ DB_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "marvel.db"
 def _load_key_stats():
     """Compute headline stats from the DB. Falls back to hardcoded values on failure."""
     defaults = {
-        "nwh_gross":     "$1.9B",
+        "phase13_rt":    "88%",
         "sp_floor":      "$709M",
         "rt_gap":        "+26 pts",
         "avengers_drop": "−56%",
@@ -21,14 +21,12 @@ def _load_key_stats():
     try:
         conn = sqlite3.connect(DB_PATH)
 
-        # No Way Home worldwide gross
+        # Phase 1-3 average RT score (the high-water mark built on deep source material)
         row = conn.execute(
-            "SELECT worldwide_gross_m FROM franchise_boxoffice "
-            "WHERE film_title LIKE '%No Way Home%' LIMIT 1"
+            "SELECT AVG(rt_score) FROM mcu_films WHERE phase <= 3"
         ).fetchone()
         if row and row[0]:
-            nwh = row[0]
-            defaults["nwh_gross"] = f"${nwh/1000:.1f}B" if nwh >= 1000 else f"${nwh:.0f}M"
+            defaults["phase13_rt"] = f"{row[0]:.0f}%"
 
         # Spider-Man franchise floor
         row = conn.execute(
@@ -87,8 +85,8 @@ def render():
     This report examines what happens when that upstream investment shortens. Since 2018,
     the average Amazing Spider-Man writer tenure has dropped to 2.4 years. The Avengers line
     has lost 56% of its sustained readership across four relaunch cycles. MCU films built on
-    thin source material average 26 Rotten Tomatoes points lower than films built on deep
-    source material. These are not independent trends. They are the same trend measured in
+    thin source material score 26 Rotten Tomatoes points lower on average than films built on
+    deep source material. These are not independent trends. They are the same trend measured in
     three different places.
     </p>
     """)
@@ -99,9 +97,9 @@ def render():
 
     kv = _load_key_stats()
     stat_cards([
-        (kv["nwh_gross"],      "No Way Home worldwide gross"),
-        (kv["sp_floor"],       "Spider-Man's lowest franchise floor"),
-        (kv["rt_gap"],         "RT gap: strong vs. weak source material"),
+        (kv["phase13_rt"],     "MCU Phase 1-3 avg Rotten Tomatoes score"),
+        (kv["sp_floor"],       "Spider-Man's lowest-grossing franchise entry"),
+        (kv["rt_gap"],         "RT score gap: strong vs. weak comic source material"),
         ("2.4 yrs",            "Avg. ASM writer tenure, post-2018"),
         (kv["avengers_drop"],  "Avengers sustained readership, 2004 to 2018"),
         ("51",                 "Spider-Man solo media titles across all formats"),
@@ -109,20 +107,19 @@ def render():
 
     prose("""
     <p>
-    <em>No Way Home</em>'s $1.9 billion was not driven by a new suit or a new villain.
-    It was driven by three generations of Peter Parker, accumulated over twenty years of
-    films built on sixty years of comics. The audience paid for a person they felt they knew.
-    Spider-Man's franchise floor of $709M is nearly double Captain America's ($371M) and
-    reflects the same dynamic: a character so thoroughly developed, across so many formats,
-    that no single bad entry can crater the long-term relationship.
+    MCU Phase 1 through 3 averaged 88% on Rotten Tomatoes. Phase 5 averages 67%. That is
+    not a coincidence about quality. It is a signal about source material depth. The films
+    that defined the MCU's cultural peak, Iron Man, The Winter Soldier, Guardians of the Galaxy,
+    Civil War, were built on characters and storylines developed across decades of long-form
+    comics. As that deep-source catalog has been adapted, the pipeline has thinned.
     </p>
     <p>
-    The 26-point RT gap between MCU films with strong vs. weak comic source material is the
-    clearest signal in this dataset. Phase 3 averaged 88%. Phase 5 averages 67%. The films
-    that defined the MCU's cultural peak were, almost without exception, built on characters
-    developed across decades of long-form comics. As the deep-source catalog has been adapted,
-    the pipeline has thinned. What fills that pipeline next depends on decisions being made in
-    publishing right now.
+    Spider-Man's franchise floor of $709M is nearly double Captain America's ($371M). The
+    reason is not any single film. It is sixty years of accumulated character work: Peter Parker
+    developed so thoroughly, across so many formats, that audiences feel genuine investment in
+    the person underneath the mask regardless of which continuity or creative team is currently
+    telling his story. That kind of floor does not come from a publishing strategy optimized
+    for first-issue orders. It comes from one optimized for depth.
     </p>
     """)
 
