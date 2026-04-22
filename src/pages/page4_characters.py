@@ -17,6 +17,33 @@ ERA_COLORS = {
 
 ERA_ORDER = ["Golden Age", "Silver Age", "Bronze Age", "Copper Age", "Modern Age", "Contemporary"]
 
+CHARACTER_EMOJI = {
+    "Captain America":          "🛡",
+    "Iron Man":                 "⚙",
+    "Thor":                     "⚡",
+    "Hulk":                     "💚",
+    "Spider-Man":               "🕷",
+    "Doctor Strange":           "✨",
+    "Black Panther":            "🐾",
+    "Star-Lord":                "🚀",
+    "Thanos":                   "🧤",
+    "Rocket Raccoon":           "🦝",
+    "Groot":                    "🌿",
+    "Winter Soldier":           "🦾",
+    "Ms. Marvel (Kamala Khan)": "⭐",
+    "Ironheart":                "🔩",
+    "Loki":                     "🐍",
+    "Vision":                   "🤖",
+    "Shang-Chi":                "🥋",
+    "Hawkeye":                  "🏹",
+    "America Chavez":           "⭐",
+    "Valkyrie":                 "⚔",
+    "Moon Knight":              "🌙",
+    "Scarlet Witch":            "🔮",
+    "Captain Marvel":          "✦",
+    "Daredevil":               "⚖",
+}
+
 CHARACTER_DATA = [
     # Golden Age
     {"character": "Captain America",        "first_year": 1941, "mcu_year": 2011, "era": "Golden Age",   "role": "Lead",       "creator": "Joe Simon & Jack Kirby",      "source_run": "Brubaker's 65-issue run (2005–09)"},
@@ -53,6 +80,7 @@ CHARACTER_DATA = [
     # Copper Age
     {"character": "Nebula",                 "first_year": 1985, "mcu_year": 2014, "era": "Copper Age",   "role": "Supporting", "creator": "Roger Stern",                  "source_run": "Avengers + Infinity Gauntlet"},
     {"character": "Ant-Man (Scott Lang)",   "first_year": 1979, "mcu_year": 2015, "era": "Bronze Age",   "role": "Lead",       "creator": "David Michelinie",             "source_run": "Marvel Premiere (1979) + Avengers"},
+    {"character": "Daredevil",             "first_year": 1964, "mcu_year": 2015, "era": "Silver Age",   "role": "Lead",       "creator": "Stan Lee & Bill Everett",      "source_run": "Frank Miller's run (1979–83); Bendis/Maleev (2001–06)"},
     # Modern Age
     {"character": "Winter Soldier",         "first_year": 2005, "mcu_year": 2014, "era": "Modern Age",   "role": "Supporting", "creator": "Ed Brubaker",                  "source_run": "Brubaker's Captain America (2005–12)"},
     {"character": "Okoye",                  "first_year": 1998, "mcu_year": 2018, "era": "Modern Age",   "role": "Supporting", "creator": "Christopher Priest",           "source_run": "Priest's Black Panther (1998–2003)"},
@@ -94,16 +122,18 @@ def render():
     df["years_developed"] = df["mcu_year"] - df["first_year"]
     df = df.sort_values("years_developed", ascending=True)
 
-    # --- Chart 1: Development Lead Time — The Hero Chart ---
+    # --- Chart 1: Development Lead Time (The Hero Chart) ---
     section_heading("Years from First Comic Appearance to MCU Debut")
 
     fig1 = go.Figure()
 
     for _, row in df.iterrows():
         color = ERA_COLORS.get(row["era"], "#888")
+        emoji = CHARACTER_EMOJI.get(row["character"], "")
+        label = f"{emoji} {row['character']}" if emoji else row["character"]
         fig1.add_trace(go.Bar(
             x=[row["years_developed"]],
-            y=[row["character"]],
+            y=[label],
             orientation="h",
             marker_color=color,
             marker_opacity=0.9,
@@ -114,7 +144,7 @@ def render():
             textposition="outside",
             textfont=dict(size=9, color="#888"),
             hovertemplate=(
-                f"<b>{row['character']}</b><br>"
+                f"<b>{emoji} {row['character']}</b><br>"
                 f"First appeared: {row['first_year']}<br>"
                 f"MCU debut: {row['mcu_year']}<br>"
                 f"Years developed: {row['years_developed']}<br>"
@@ -125,24 +155,23 @@ def render():
             ),
         ))
 
-    # Add era legend via annotation
+    # Era legend using paper coordinates
     for i, (era, color) in enumerate(ERA_COLORS.items()):
         fig1.add_annotation(
-            x=80, y=i * 1.3,
-            text=f"<span style='color:{color}'>■</span> {era}",
+            x=1.01, y=1.0 - i * 0.08,
+            xref="paper", yref="paper",
+            text=f"● {era}",
             showarrow=False,
             font=dict(size=10, color=color),
             xanchor="left",
-            xref="x", yref="y",
-            align="left",
         )
 
+    fig1.update_layout(**dict(PLOTLY_LAYOUT))
     fig1.update_layout(
-        **dict(PLOTLY_LAYOUT),
-        height=950,
+        height=980,
         xaxis=dict(**AXIS_STYLE, title="Years from First Comic Appearance to MCU Debut", range=[0, 82]),
         yaxis=dict(**AXIS_STYLE, autorange=True),
-        margin=dict(t=40, b=50, l=220, r=80),
+        margin=dict(t=40, b=50, l=240, r=130),
         title=dict(
             text="MCU Characters: Years of Story Development Before Filming",
             font=dict(size=14, color="#ccc"), x=0.0,
@@ -184,7 +213,7 @@ def render():
             marker_opacity=0.9 if role == "Lead" else 0.45,
             marker_pattern_shape="" if role == "Lead" else "/",
             hovertemplate=(
-                f"<b>%{{x}}</b> — {role}<br>"
+                f"<b>%{{x}}</b>, {role}<br>"
                 "Characters: %{y}"
                 "<extra></extra>"
             ),
@@ -217,7 +246,7 @@ def render():
         "that is being drawn down."
     )
 
-    # --- Chart 3: Scatter — First Appearance Year vs. Years Developed ---
+    # --- Chart 3: Scatter (First Appearance Year vs. Years Developed) ---
     st.markdown("<br>", unsafe_allow_html=True)
     section_heading("The Compression Is Accelerating")
 
@@ -226,20 +255,24 @@ def render():
         subset = df[df["era"] == era]
         if subset.empty:
             continue
+        emoji_labels = [CHARACTER_EMOJI.get(c, "·") for c in subset["character"]]
         fig3.add_trace(go.Scatter(
             x=subset["first_year"],
             y=subset["years_developed"],
-            mode="markers",
+            mode="markers+text",
             name=era,
             marker=dict(
                 color=ERA_COLORS[era],
-                size=11,
+                size=13,
                 opacity=0.85,
                 line=dict(width=1, color="#222"),
             ),
-            text=subset["character"],
+            text=emoji_labels,
+            textposition="top center",
+            textfont=dict(size=14),
+            customdata=subset["character"],
             hovertemplate=(
-                "<b>%{text}</b><br>"
+                "<b>%{customdata}</b><br>"
                 "First appeared: %{x}<br>"
                 "Years developed: %{y}<br>"
                 "<extra></extra>"

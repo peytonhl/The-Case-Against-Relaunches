@@ -53,7 +53,7 @@ def render():
     The relaunch is one of Marvel's most consistent sales tools. Publish a new #1, generate
     first-issue excitement, and watch the numbers spike. The strategy has a genuine rationale:
     new entry points are valuable, and a fresh creative team can reinvigorate a title that has
-    lost momentum. What makes the data interesting is what it shows about the full cycle — not
+    lost momentum. What makes the data interesting is what it shows about the full cycle: not
     just the spike, but the baseline readership that follows, and how that baseline has shifted
     across multiple relaunch cycles over two decades.
     </p>
@@ -113,7 +113,7 @@ def render():
             ),
             opacity=opacity,
             hovertemplate=(
-                f"<b>{meta['label']}</b> — {meta['writer']}<br>"
+                f"<b>{meta['label']}</b>, {meta['writer']}<br>"
                 "Issue #%{x}<br>"
                 "Orders: %{y:.1f}k<br>"
                 "%{customdata}"
@@ -133,7 +133,7 @@ def render():
         ),
         legend=dict(bgcolor="#111", bordercolor="#333", borderwidth=1, font=dict(size=11)),
         title=dict(
-            text="ASM Sales Trajectory by Relaunch — Starting from Issue #2 (Variant-Free Baseline)",
+            text="ASM Sales Trajectory by Relaunch (Issue #2 Baseline)",
             font=dict(size=13, color="#ccc"), x=0.0,
         ),
     )
@@ -184,9 +184,9 @@ def render():
         marker_opacity=0.25,
         marker_pattern_shape="/",
         hovertemplate=(
-            "<b>%{x} — Issue #1</b><br>"
+            "<b>%{x}, Issue #1</b><br>"
             "%{y:.0f}k orders<br>"
-            "<i>Includes variant covers — not a readership figure</i>"
+            "<i>Includes variant covers; not a readership figure</i>"
             "<extra></extra>"
         ),
     ))
@@ -199,9 +199,9 @@ def render():
         marker_color=[VOLUME_META[v]["color"] for v in issue_twos["relaunch_volume"]],
         marker_opacity=0.9,
         hovertemplate=(
-            "<b>%{x} — Issue #2</b><br>"
+            "<b>%{x}, Issue #2</b><br>"
             "%{y:.0f}k orders<br>"
-            "<i>First variant-free issue — actual reader demand</i>"
+            "<i>First variant-free issue; actual reader demand</i>"
             "<extra></extra>"
         ),
         text=[f"{o/1000:.0f}k" for o in issue_twos["orders"]],
@@ -209,11 +209,11 @@ def render():
         textfont=dict(size=11, color="#ccc"),
     ))
 
+    fig2.update_layout(**dict(PLOTLY_LAYOUT))
     fig2.update_layout(
-        **dict(PLOTLY_LAYOUT),
-        height=400,
+        height=430,
         barmode="group",
-        xaxis=dict(**AXIS_STYLE),
+        xaxis=dict(**AXIS_STYLE, tickangle=-40),
         yaxis=dict(**AXIS_STYLE, title="Orders (thousands)",
             range=[0, 620],
         ),
@@ -222,6 +222,7 @@ def render():
             text="Issue #1 Orders (variant-inflated) vs. Issue #2 (real readership baseline)",
             font=dict(size=13, color="#ccc"), x=0.0,
         ),
+        margin=dict(t=40, b=100, l=60, r=40),
     )
     st.plotly_chart(fig2, use_container_width=True)
 
@@ -237,7 +238,7 @@ def render():
 
     # --- Chart 3: Drop-off rate from #2 to #12 ---
     st.markdown("<br>", unsafe_allow_html=True)
-    section_heading("The Floor Is Falling")
+    section_heading("The Same Ceiling, Every Time")
 
     issue_12 = df_main[df_main["issue_num"] == 12][["relaunch_volume", "orders", "data_confidence"]].rename(
         columns={"orders": "orders_12", "data_confidence": "conf_12"}
@@ -293,10 +294,10 @@ def render():
         height=320,
         xaxis=dict(**AXIS_STYLE),
         yaxis=dict(**AXIS_STYLE, title="Issue #12 Orders (thousands)",
-            range=[40, 100],
+            range=[35, 115],
         ),
         title=dict(
-            text="Issue #12 Sustained Readership Floor by Relaunch",
+            text="Issue #12 Sustained Readership by Relaunch",
             font=dict(size=13, color="#ccc"), x=0.0,
         ),
     )
@@ -329,7 +330,7 @@ def render():
 
     # --- Multi-title comparison ---
     st.markdown("<br>", unsafe_allow_html=True)
-    section_heading("Spider-Man Holds. Avengers and Daredevil Don't.")
+    section_heading("Spider-Man Holds. The Rest of the Catalog Doesn't.")
 
     prose("""
     <p>
@@ -340,9 +341,9 @@ def render():
     comes next.
     </p>
     <p>
-    It also makes the Avengers and Daredevil data more striking by contrast. The chart below
-    plots issue #2 orders — the variant-free readership baseline — for every tracked relaunch
-    across all three titles. The lines do not move together.
+    The chart below plots issue #2 orders (the variant-free readership baseline) for every
+    tracked relaunch across five flagship Marvel titles. With more titles in view, the pattern
+    becomes harder to dismiss: ASM's stability is the outlier, not the norm.
     </p>
     """)
 
@@ -356,75 +357,113 @@ def render():
             "Amazing Spider-Man": "#e23636",
             "Avengers":           "#5b8dbf",
             "Daredevil":          "#e8b84b",
+            "Captain America":    "#2aa198",
+            "Thor":               "#bf6f30",
         }
-        TITLE_SYMBOLS = {
-            "Amazing Spider-Man": "circle",
-            "Avengers":           "square",
-            "Daredevil":          "diamond",
+        TITLE_EMOJI = {
+            "Amazing Spider-Man": "🕷",
+            "Avengers":           "⭐",
+            "Daredevil":          "⚖",
+            "Captain America":    "🛡",
+            "Thor":               "⚡",
         }
 
         fig_multi = go.Figure()
 
-        for title in ["Amazing Spider-Man", "Avengers", "Daredevil"]:
+        for title in ["Amazing Spider-Man", "Avengers", "Daredevil", "Captain America", "Thor"]:
             subset = mdf[mdf["title"] == title].sort_values("relaunch_year")
             if subset.empty:
                 continue
             is_confirmed = subset["data_confidence"].str.startswith("Confirmed")
+            emoji = TITLE_EMOJI[title]
             fig_multi.add_trace(go.Scatter(
                 x=subset["relaunch_year"],
                 y=subset["orders"] / 1000,
-                mode="lines+markers",
+                mode="lines+markers+text",
                 name=title,
                 line=dict(color=TITLE_COLORS[title], width=2.5),
                 marker=dict(
                     color=TITLE_COLORS[title],
-                    size=10,
-                    symbol=[TITLE_SYMBOLS[title] if c else TITLE_SYMBOLS[title] + "-open"
-                            for c in is_confirmed],
-                    opacity=[1.0 if c else 0.6 for c in is_confirmed],
-                    line=dict(width=1.5, color=TITLE_COLORS[title]),
+                    size=18,
+                    opacity=0,
                 ),
-                text=subset["run_label"],
+                text=[emoji] * len(subset),
+                textposition="middle center",
+                textfont=dict(size=16),
+                customdata=list(zip(subset["run_label"], subset["data_confidence"])),
                 hovertemplate=(
-                    "<b>%{text}</b><br>"
+                    "<b>%{customdata[0]}</b><br>"
                     "Year: %{x}<br>"
                     "Issue #2 orders: %{y:.1f}k<br>"
-                    "%{customdata}"
+                    "%{customdata[1]}"
                     "<extra></extra>"
                 ),
-                customdata=subset["data_confidence"],
             ))
 
         fig_multi.add_annotation(
             x=0.01, y=0.02, xref="paper", yref="paper",
-            text="All data points = Issue #2 (variant-free readership baseline) · Hollow markers = Estimate or PRH-normalized",
+            text="All points = Issue #2 baseline · 🕷 ASM · ⭐ Avengers · ⚖ Daredevil · 🛡 Cap · ⚡ Thor · Dashed = estimate or PRH-normalized",
             showarrow=False, font=dict(size=9, color="#555"), xanchor="left",
         )
 
         fig_multi.update_layout(
             **dict(PLOTLY_LAYOUT),
-            height=420,
-            xaxis=dict(**AXIS_STYLE, title="Relaunch Year", dtick=4),
-            yaxis=dict(**AXIS_STYLE, title="Issue #2 Orders (thousands)", range=[20, 175]),
+            height=460,
+            xaxis=dict(**AXIS_STYLE, title="Relaunch Year", dtick=6),
+            yaxis=dict(**AXIS_STYLE, title="Issue #2 Orders (thousands)", range=[20, 180]),
             legend=dict(bgcolor="#111", bordercolor="#333", borderwidth=1, font=dict(size=11)),
             title=dict(
-                text="Issue #2 Readership at Relaunch — Amazing Spider-Man, Avengers, Daredevil",
+                text="Issue #2 Readership at Relaunch: Five Marvel Flagship Titles",
                 font=dict(size=13, color="#ccc"), x=0.0,
             ),
         )
         st.plotly_chart(fig_multi, use_container_width=True)
 
         chart_annotation(
-            "Avengers shows the steepest decline: New Avengers (2004) opened at 153k at issue #2 "
-            "under Brian Bendis — the high-water mark in this dataset. By 2018, Jason Aaron's relaunch "
-            "opened at 67k. That is a 56% decline in sustained readership across four relaunch cycles. "
-            "Daredevil tells the same story: 83k at issue #2 in 1998, down to 41k by 2011 — "
-            "a drop that even Mark Waid's critically acclaimed run did not reverse. "
-            "Amazing Spider-Man is the outlier: its baseline has held stable across the same 25-year window. "
-            "The difference is not creative quality. Waid's Daredevil was excellent. "
-            "The difference is that Spider-Man carries enough brand weight to survive a readership reset. "
-            "Most characters in the Marvel universe do not have that cushion."
+            "Four of the five titles show a consistent downward trend across relaunch cycles. "
+            "Avengers drops from 153k (Bendis, 2004) to 67k (Aaron, 2018), a 56% decline. "
+            "Captain America falls from ~90k (Brubaker, 2004) to ~57k (Coates, 2018), down 37%. "
+            "Thor declines from ~78k (Straczynski, 2007) to ~50k (Aaron, 2018), down 36%. "
+            "Daredevil goes from 83k (1998) to 41k (Waid, 2011), down 51%. "
+            "Amazing Spider-Man held between 110–125k from 1999 through 2018 on confirmed Comichron data, "
+            "the only title in this set without a meaningful downward trend across the same period. "
+            "Captain America and Thor figures are estimates derived from Comichron's monthly charts; "
+            "see the Appendix for confidence classifications. "
+            "The ASM 2022 data point (170k) is a PRH estimate and carries wider error bars."
         )
+
+        prose("""
+        <p>
+        Why does Spider-Man hold when comparably well-crafted titles don't? The data can't answer
+        that directly, but the pattern is consistent with something that is easy to overlook in a
+        sales analysis: <strong>readers aren't just buying Spider-Man. They're buying Peter Parker.</strong>
+        </p>
+        <p>
+        Most Marvel characters are defined primarily by their powers, their costume, or their
+        mission. Captain America is the shield and the ideal. Daredevil is the radar sense and
+        Hell's Kitchen. The Avengers are a rotating lineup organized around a concept. Strip away
+        the costume and there isn't much story left to tell. Spider-Man is different. Peter Parker
+        is the character: the broke photographer, the overcommitted grad student, the kid who can
+        never catch a break. The powers are almost incidental. The stories that made Spider-Man a cultural
+        force weren't about what he could do. They were about what it cost him to keep doing it.
+        </p>
+        <p>
+        That depth of alter-ego investment insulates ASM from the worst effects of the relaunch
+        cycle. A reader who cares about Peter Parker will show up for the new #1 because the
+        character they love is still in it. A reader who cares about "Avengers" as a concept has
+        less reason to follow when the roster, creative team, and direction all reset simultaneously.
+        Daredevil had Frank Miller, Brian Michael Bendis, and Mark Waid, three of the strongest
+        sustained creative runs in Marvel's catalog, and the readership still declined 50% over
+        15 years. The relaunch cycle erodes even the best-built audiences over time.
+        </p>
+        <p>
+        The implication for the business case is direct: <em>Peter Parker's resilience is not an
+        argument for continuing to relaunch Amazing Spider-Man.</em> It's an argument for
+        investing that same alter-ego depth into the characters who currently lack it.
+        The Avengers lineup doesn't have a Peter Parker. Neither does most of the Marvel catalog.
+        That is a gap that long-form character development is best positioned to fill. A new #1 doesn't do it.
+        </p>
+        """)
 
     pull_quote(
         "The readers who kept showing up for Avengers and Daredevil through every relaunch "

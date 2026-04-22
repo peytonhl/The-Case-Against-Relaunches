@@ -91,9 +91,9 @@ def render():
     section_heading("Recommendations")
 
     rec_box(
-        "01 — Protect Writer Tenures on Flagship Titles",
-        "The creative runs that produced Marvel's most enduring characters — and its most adaptable "
-        "story material — were built by writers given meaningful time on a title. A minimum of 36 "
+        "01: Protect Writer Tenures on Flagship Titles",
+        "The creative runs that produced Marvel's most enduring characters and its most adaptable "
+        "story material were built by writers given meaningful time on a title. A minimum of 36 "
         "issues gives a writer enough runway to introduce a villain, develop a supporting cast, and "
         "earn an emotional payoff. Sixty or more issues is where the really interesting things tend "
         "to happen. Roger Stern created the Hobgoblin in 29 issues. David Michelinie built Venom "
@@ -103,7 +103,7 @@ def render():
     )
 
     rec_box(
-        "02 — Solve the Accessibility Problem with New Characters, Not Continuity Resets",
+        "02: Solve the Accessibility Problem with New Characters, Not Continuity Resets",
         "The legitimate problem that relaunches attempt to solve is real: comics with 60 years of "
         "continuity can be genuinely hard to walk into. But the Miles Morales model shows a better "
         "path. Miles is a new character with a clean origin, a fresh supporting cast, and no "
@@ -115,7 +115,7 @@ def render():
     )
 
     rec_box(
-        "03 — Weight Sustained Readership More Heavily Than Launch Numbers",
+        "03: Weight Sustained Readership More Heavily Than Launch Numbers",
         "First-issue orders are a reasonable signal but a misleading primary metric, because they "
         "capture speculator activity as much as genuine reader interest. A title that launches at "
         "80,000 and holds 60,000 at issue twenty-four is building something durable. A title that "
@@ -126,7 +126,7 @@ def render():
     )
 
     rec_box(
-        "04 — Develop Pipeline Characters on a Long Horizon",
+        "04: Develop Pipeline Characters on a Long Horizon",
         "The comics line has a unique advantage: it can develop characters years before a film or "
         "streaming project needs them. If the next phase of the MCU will eventually need a deeply "
         "felt Nova, a rich Ghost Rider mythology, or a well-developed Sentry, the time to build "
@@ -137,7 +137,7 @@ def render():
     )
 
     rec_box(
-        "05 — Protect Flagship Runs from Mandatory Event Crossovers",
+        "05: Protect Flagship Runs from Mandatory Event Crossovers",
         "Some of the best long-form runs in Marvel's history, including Brubaker's Captain America, "
         "Priest's Black Panther, and Abnett and Lanning's Guardians, were produced by writers "
         "given the space to tell their story without constant interruption. Event crossovers serve "
@@ -149,7 +149,7 @@ def render():
     )
 
     rec_box(
-        "06 — Publish Monthly Sales Data",
+        "06: Publish Monthly Sales Data",
         "When Penguin Random House took over Marvel distribution in 2021, the public data pipeline "
         "that Comichron and the broader industry had relied on for decades went dark. Diamond "
         "published monthly order charts. PRH does not. This affects more than just analysts: "
