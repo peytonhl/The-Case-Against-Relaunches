@@ -218,7 +218,10 @@ def render():
             }
             return colors.get(val, "")
 
-        styled = display_df.style.applymap(style_confidence, subset=["Confidence"])
+        try:
+            styled = display_df.style.map(style_confidence, subset=["Confidence"])
+        except AttributeError:
+            styled = display_df.style.applymap(style_confidence, subset=["Confidence"])
         st.dataframe(styled, use_container_width=True, height=400)
 
         confirmed = (df["data_confidence"].str.startswith("Confirmed")).sum()

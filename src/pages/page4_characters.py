@@ -190,11 +190,13 @@ def render():
         "Kang: 58. Doctor Strange: 53. Groot: 54. "
         "The characters at the top of the chart arrived at the MCU with decades of comics-built mythology, "
         "deep villain histories, earned emotional arcs, and a reader base that already loved them. "
-        "Now look at the bottom. Winter Soldier: 9 years (Ed Brubaker's character, genuinely exceptional). "
-        "Ms. Marvel: 9 years. America Chavez: 11 years. Ironheart: 6 years. "
-        "These are characters being developed for the screen at the same time "
-        "they're being developed on the page. That's a very short runway to build something lasting, "
-        "and it's worth asking what those characters might become with more time."
+        "Now look at the bottom. Winter Soldier: 9 years. Ms. Marvel: 9 years. Ironheart: 6 years. "
+        "These are characters being developed for the screen at the same time they're being developed on the page. "
+        "The compression is not random. Characters created in the 1960s and 70s arrived with 40–70 years of story capital. "
+        "Characters created after 2000 arrived with under 25. Characters created in the 2010s arrived with under 12. "
+        "Each generation of MCU characters has had less accumulated story to draw from than the last — "
+        "a direct consequence of a publishing model that has spent 25 years relaunching existing titles "
+        "instead of building new long-form character development from the ground up."
     )
 
     # --- Chart 2: MCU Characters by Era of Comic Origin ---
@@ -250,77 +252,7 @@ def render():
         "that is being drawn down."
     )
 
-    # --- Chart 3: Scatter (First Appearance Year vs. Years Developed) ---
-    st.markdown("<br>", unsafe_allow_html=True)
-    section_heading("The Compression Is Accelerating")
-
-    fig3 = go.Figure()
-    for era in ERA_ORDER:
-        subset = df[df["era"] == era]
-        if subset.empty:
-            continue
-        emoji_labels = [CHARACTER_EMOJI.get(c, "·") for c in subset["character"]]
-        fig3.add_trace(go.Scatter(
-            x=subset["first_year"],
-            y=subset["years_developed"],
-            mode="markers+text",
-            name=era,
-            marker=dict(
-                color=ERA_COLORS[era],
-                size=13,
-                opacity=0.85,
-                line=dict(width=1, color="#222"),
-            ),
-            text=emoji_labels,
-            textposition="top center",
-            textfont=dict(size=14),
-            customdata=subset["character"],
-            hovertemplate=(
-                "<b>%{customdata}</b><br>"
-                "First appeared: %{x}<br>"
-                "Years developed: %{y}<br>"
-                "<extra></extra>"
-            ),
-        ))
-
-    # Add a trend annotation line (visual only)
-    fig3.add_annotation(
-        x=1975, y=15,
-        text="Characters created after 1990<br>average under 20 years of<br>story development at MCU debut",
-        showarrow=True,
-        arrowhead=2,
-        ax=80,
-        ay=-40,
-        font=dict(size=10, color="#888"),
-        arrowcolor="#555",
-    )
-
-    fig3.update_layout(
-        **dict(PLOTLY_LAYOUT),
-        height=420,
-        xaxis=dict(**AXIS_STYLE, title="Year of First Comic Appearance", range=[1935, 2020]),
-        yaxis=dict(**AXIS_STYLE, title="Years Developed Before MCU Debut", range=[-2, 80]),
-        legend=dict(bgcolor="#111", bordercolor="#333", borderwidth=1, font=dict(size=11)),
-        title=dict(
-            text="First Appearance Year vs. Years of Story Development at MCU Debut",
-            font=dict(size=14, color="#ccc"), x=0.0,
-        ),
-    )
-    st.plotly_chart(fig3, use_container_width=True)
-
-    chart_annotation(
-        "Characters created in the 1960s and 70s arrived at the MCU with 40–70 years of story capital. "
-        "Characters created in the 1990s and 2000s arrived with 10–30 years. "
-        "Characters created in the 2010s arrived with under 12. "
-        "This is not a coincidence. It is the direct result of a publishing model that has spent "
-        "25 years relaunching existing titles instead of investing in new long-form character development. "
-        "Building the next Black Panther, the next Guardians of the Galaxy, "
-        "the next Iron Man takes a decade of committed writing to make feel real. "
-        "The characters at the bottom of this chart are at the beginning of that journey. "
-        "The question is how much runway they'll be given to finish it."
-    )
-
-    # --- Chart 4: Issue Appearance Count from ComicVine ---
+    # --- Chart 3: Issue Appearance Count from ComicVine ---
     st.markdown("<br>", unsafe_allow_html=True)
     section_heading("Story Capital: Total Comic Issue Appearances")
 
@@ -387,8 +319,8 @@ def render():
                 annotation_font=dict(size=9, color="#555"),
             )
 
+        fig4.update_layout(**dict(PLOTLY_LAYOUT))
         fig4.update_layout(
-            **dict(PLOTLY_LAYOUT),
             height=520,
             xaxis=dict(**AXIS_STYLE, title="Total Issue Appearances (ComicVine)", range=[0, 21000]),
             yaxis=dict(**AXIS_STYLE, autorange=True),
@@ -454,7 +386,7 @@ def render():
     that made the MCU's best films possible.
     </p>
     <p>
-    Section 03 showed the compression in writer tenure. This section shows what that compression costs
+    Section 04 showed the compression in writer tenure. This section shows what that compression costs
     in the currency the MCU actually runs on: story depth. Section 06 shows what the data above looks like
     on a balance sheet.
     </p>
