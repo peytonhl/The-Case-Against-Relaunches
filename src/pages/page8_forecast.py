@@ -516,6 +516,320 @@ def render():
         f"That is the dollar value of the relaunch problem."
     )
 
+    # ── Relaunch vs. Continue ──────────────────────────────────────────────────
+    section_heading("Relaunch vs. Continue: The Decision")
+
+    prose("""
+    <p>
+    The scenarios above model the relaunch in isolation. The actual editorial decision
+    is a comparison: does relaunching generate more readership and revenue than continuing
+    the existing run? Set the current title's readership below and the model runs both
+    trajectories side by side, identifies the break-even point if one exists, and
+    computes the revenue delta over your chosen horizon.
+    </p>
+    <p>
+    The relaunch carries a two-issue startup cost: months 0 and 1 generate zero direct
+    orders while the new volume is in production. The comparison reflects that.
+    </p>
+    """)
+
+    col_cur, col_dc = st.columns([1, 1])
+    with col_cur:
+        current_k = st.number_input(
+            "Current run readership (orders/month)",
+            min_value=5_000, max_value=300_000, value=60_000, step=5_000,
+            key="rvc_current",
+            help="The existing title's sustained monthly orders before any relaunch decision."
+        )
+    with col_dc:
+        annual_decline_pct = st.slider(
+            "Organic annual decline without relaunch (%/yr)",
+            min_value=0, max_value=25, value=8, step=1,
+            key="rvc_decline",
+            help=(
+                "Expected yearly readership decay if the run continues unchanged. "
+                "Derived from the ASM retention data: mid-run (issues 12-24) sees "
+                "roughly 8-10% annual decay. 8% is a conservative default."
+            )
+        )
+
+    # ── Continuation trajectory ────────────────────────────────────────────────
+    # Monthly decline rate (each issue = one month for a standard ongoing)
+    issue_decline = (1 - annual_decline_pct / 100) ** (1 / 12)
+    x_range   = list(range(0, run_length + 1))
+    cont_y    = [current_k * (issue_decline ** i) for i in x_range]
+
+    # ── Relaunch trajectory (aligned to same x axis) ───────────────────────────
+    # x=0 = decision point, x=2 = new vol. issue #2, x=6 = issue #6, etc.
+    relaunch_x = issues          # [2, 6, 12, 24, 36] — absolute issue numbers == months from decision
+    relaunch_y = pred            # predicted orders at each checkpoint
+
+    # Linear interpolation helper for relaunch at any integer x
+    def interp_relaunch(x):
+        valid = [(xi, yi) for xi, yi in zip(relaunch_x, relaunch_y) if yi is not None]
+        if not valid or x < valid[0][0]:
+            return 0.0
+        for i in range(len(valid) - 1):
+            x0, y0 = valid[i]
+            x1, y1 = valid[i + 1]
+            if x0 <= x <= x1:
+                return y0 + (y1 - y0) * (x - x0) / (x1 - x0)
+        return float(valid[-1][1])
+
+    # ── Break-even: first issue where relaunch readership > continuation ────────
+    readership_be = None
+    for x in range(2, run_length + 1):
+        if interp_relaunch(x) > cont_y[x]:
+            readership_be = x
+            break
+
+    # ── Revenue over the comparison window ─────────────────────────────────────
+    # Relaunch: zero revenue at months 0-1; revenue from month 2 onward
+    relaunch_rev = sum(interp_relaunch(x) * pub_net for x in range(2, run_length + 1))
+    # Continuation: revenue from month 0 onward
+    cont_rev = sum(cont_y[x] * pub_net for x in range(0, run_length + 1))
+    rev_delta = relaunch_rev - cont_rev
+
+    # ── Cumulative revenue series (both scenarios) ─────────────────────────────
+    cum_relaunch = []
+    cum_cont     = []
+    running_r = running_c = 0.0
+    revenue_be = None
+    for x in x_range:
+        running_r += interp_relaunch(x) * pub_net / 1_000
+        running_c += cont_y[x] * pub_net / 1_000
+        cum_relaunch.append(running_r)
+        cum_cont.append(running_c)
+        if revenue_be is None and running_r > running_c and x >= 2:
+            revenue_be = x
+
+    # ── Trajectory comparison chart ────────────────────────────────────────────
+    rvc_fig = go.Figure()
+
+    # Cancellation zone
+    rvc_fig.add_shape(
+        type="rect", x0=0, x1=run_length,
+        y0=threshold_k * 0.85, y1=threshold_k * 1.20,
+        fillcolor="rgba(232,184,75,0.07)",
+        line=dict(color="rgba(0,0,0,0)"), layer="below",
+    )
+    rvc_fig.add_hline(
+        y=threshold_k,
+        line=dict(color="#e8b84b", width=1.5, dash="dot"),
+        annotation_text=f"Cancellation zone ({threshold_k/1000:.0f}k)",
+        annotation_position="right",
+        annotation_font=dict(color="#e8b84b", size=10,
+                             family="'Courier New', monospace"),
+    )
+
+    # Continuation
+    rvc_fig.add_trace(go.Scatter(
+        x=x_range, y=cont_y,
+        mode="lines", name=f"Continue ({current_k//1000}k, -{annual_decline_pct}%/yr)",
+        line=dict(color="#7799cc", width=2.5, dash="dash"),
+        hovertemplate="Month +%{x}: <b>%{y:,.0f}</b> (continue)<extra></extra>",
+    ))
+
+    # Relaunch CI band (only from issue 2 onward)
+    ci_x_fwd  = [x for x in issues if x <= run_length]
+    ci_hi_fwd = [v for x, v in zip(issues, ci_hi) if x <= run_length]
+    ci_lo_fwd = [v for x, v in zip(issues, ci_lo) if x <= run_length]
+    rvc_fig.add_trace(go.Scatter(
+        x=ci_x_fwd + ci_x_fwd[::-1],
+        y=[v if v else 0 for v in ci_hi_fwd] +
+          [v if v else 0 for v in ci_lo_fwd[::-1]],
+        fill="toself", fillcolor=CI_FILL_COLOR,
+        line=dict(color="rgba(0,0,0,0)"),
+        showlegend=True, name="Relaunch 95% CI", hoverinfo="skip",
+    ))
+
+    # Relaunch line
+    rl_x_plot = [x for x in issues if x <= run_length]
+    rl_y_plot = [p for x, p in zip(issues, pred) if x <= run_length and p is not None]
+    rvc_fig.add_trace(go.Scatter(
+        x=rl_x_plot, y=rl_y_plot,
+        mode="lines+markers", name=f"Relaunch ({baseline_k}k opener)",
+        line=dict(color=SCENARIO_COLOR, width=3),
+        marker=dict(size=8, color=SCENARIO_COLOR),
+        hovertemplate="Month +%{x}: <b>%{y:,.0f}</b> (relaunch)<extra></extra>",
+    ))
+
+    # Break-even vertical line
+    if readership_be is not None:
+        rvc_fig.add_vline(
+            x=readership_be,
+            line=dict(color="#6fbf7a", width=1.5, dash="dot"),
+            annotation_text=f"Relaunch ahead: month #{readership_be}",
+            annotation_position="top right",
+            annotation_font=dict(color="#6fbf7a", size=12, family="Bangers, cursive"),
+        )
+    else:
+        rvc_fig.add_annotation(
+            x=(run_length * 0.55), y=float(baseline) * 0.92,
+            text="Relaunch never exceeds continuation",
+            showarrow=False,
+            font=dict(color="#e8b84b", size=13, family="Bangers, cursive"),
+        )
+
+    rvc_fig.update_layout(**dict(PLOTLY_LAYOUT))
+    rvc_fig.update_layout(
+        title=dict(text=""),
+        height=460,
+        margin=dict(t=30, b=50, l=70, r=160),
+        xaxis=dict(
+            title=f"Months from Decision (0 = now, relaunch ships at month 2)",
+            gridcolor="#1a1a1a",
+            range=[-0.5, run_length + 0.5],
+        ),
+        yaxis=dict(
+            title="Estimated Orders",
+            tickformat=",", gridcolor="#1a1a1a",
+        ),
+        legend=dict(orientation="v", x=1.01, y=1,
+                    bgcolor="rgba(0,0,0,0)", font=dict(size=10)),
+        hovermode="x unified",
+    )
+    st.plotly_chart(rvc_fig, use_container_width=True)
+
+    # ── Revenue comparison stat cards ──────────────────────────────────────────
+    winner_label = "Relaunch wins" if rev_delta > 0 else "Continue wins"
+    winner_color = SCENARIO_COLOR if rev_delta > 0 else "#7799cc"
+    be_label = f"Month #{readership_be}" if readership_be else f"Never (in {run_length})"
+    be_color = "#6fbf7a" if readership_be else "#888"
+
+    rvc_card_html = '<div style="display:flex;gap:1rem;flex-wrap:wrap;margin:0.75rem 0 1.25rem;">'
+    rvc_cards = [
+        (f"${relaunch_rev/1_000_000:.2f}M", "Relaunch gross",
+         f"Months 2-{run_length}", SCENARIO_COLOR),
+        (f"${cont_rev/1_000_000:.2f}M",     "Continue gross",
+         f"Months 0-{run_length}", "#7799cc"),
+        (f"${abs(rev_delta)/1_000_000:.2f}M", winner_label,
+         f"revenue delta over {run_length} months", winner_color),
+        (be_label, "Readership break-even",
+         "when relaunch per-issue orders exceed continuation", be_color),
+    ]
+    for val, label, sub, col in rvc_cards:
+        rvc_card_html += (
+            f'<div style="background:#111;border:1px solid #1e1e1e;'
+            f'border-top:2px solid {col};padding:0.9rem 1.1rem;min-width:160px;flex:1;">'
+            f'<div style="font-size:0.65rem;color:#888;font-family:\'Courier New\',monospace;'
+            f'letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.3rem;">{label}</div>'
+            f'<div style="font-size:1.5rem;font-family:Bangers,cursive;color:{col};'
+            f'letter-spacing:0.05em;line-height:1.1;">{val}</div>'
+            f'<div style="font-size:0.68rem;color:#555;font-family:\'Courier New\',monospace;'
+            f'margin-top:0.2rem;">{sub}</div>'
+            f'</div>'
+        )
+    rvc_card_html += '</div>'
+    st.markdown(rvc_card_html, unsafe_allow_html=True)
+
+    # ── Cumulative revenue chart ───────────────────────────────────────────────
+    cum_fig = go.Figure()
+    cum_fig.add_trace(go.Scatter(
+        x=x_range, y=cum_cont,
+        name="Continue", mode="lines",
+        line=dict(color="#7799cc", width=2.5),
+        fill="tozeroy", fillcolor="rgba(119,153,204,0.06)",
+        hovertemplate="Month +%{x}: $%{y:.0f}k cumulative<extra></extra>",
+    ))
+    cum_fig.add_trace(go.Scatter(
+        x=x_range, y=cum_relaunch,
+        name="Relaunch", mode="lines",
+        line=dict(color=SCENARIO_COLOR, width=2.5),
+        fill="tozeroy", fillcolor="rgba(226,54,54,0.06)",
+        hovertemplate="Month +%{x}: $%{y:.0f}k cumulative<extra></extra>",
+    ))
+
+    if revenue_be is not None:
+        cum_fig.add_vline(
+            x=revenue_be,
+            line=dict(color="#6fbf7a", width=1.5, dash="dot"),
+            annotation_text=f"Revenue crossover: month #{revenue_be}",
+            annotation_position="top left" if revenue_be > run_length * 0.6 else "top right",
+            annotation_font=dict(color="#6fbf7a", size=12, family="Bangers, cursive"),
+        )
+
+    cum_fig.update_layout(**dict(PLOTLY_LAYOUT))
+    cum_fig.update_layout(
+        title=dict(text="Cumulative Publisher Gross: Relaunch vs. Continue"),
+        height=320,
+        margin=dict(t=50, b=40, l=80, r=30),
+        xaxis=dict(title="Months from Decision", gridcolor="#1a1a1a"),
+        yaxis=dict(
+            title="Cumulative Gross ($k)",
+            tickprefix="$", ticksuffix="k", gridcolor="#1a1a1a",
+        ),
+        legend=dict(orientation="h", x=0, y=1.12,
+                    bgcolor="rgba(0,0,0,0)", font=dict(size=11)),
+        hovermode="x unified",
+    )
+    st.plotly_chart(cum_fig, use_container_width=True)
+
+    # ── Verdict box ────────────────────────────────────────────────────────────
+    if readership_be is None and rev_delta <= 0:
+        verdict_color = "#7799cc"
+        verdict_icon  = "CONTINUE"
+        verdict_text  = (
+            f"At a <strong>{baseline_k}k relaunch baseline</strong> and "
+            f"<strong>{current_k//1000}k current readership</strong> with "
+            f"<strong>{annual_decline_pct}% annual organic decay</strong>, "
+            f"the relaunch never achieves higher per-issue readership than simply "
+            f"continuing the run, and generates "
+            f"<strong>${abs(rev_delta)/1_000_000:.2f}M less</strong> over "
+            f"{run_length} months. The spike does not compensate for the startup gap "
+            f"or the depth of the current readership advantage."
+        )
+    elif readership_be is not None and rev_delta > 0:
+        verdict_color = SCENARIO_COLOR
+        verdict_icon  = "RELAUNCH"
+        verdict_text  = (
+            f"At a <strong>{baseline_k}k relaunch baseline</strong> and "
+            f"<strong>{current_k//1000}k current readership</strong> with "
+            f"<strong>{annual_decline_pct}% annual organic decay</strong>, "
+            f"the relaunch overtakes the continuation run in per-issue readership "
+            f"at <strong>month #{readership_be}</strong> and generates "
+            f"<strong>${abs(rev_delta)/1_000_000:.2f}M more</strong> over "
+            f"{run_length} months."
+        )
+    else:
+        verdict_color = "#e8b84b"
+        verdict_icon  = "MIXED"
+        verdict_text  = (
+            f"At a <strong>{baseline_k}k relaunch baseline</strong> and "
+            f"<strong>{current_k//1000}k current readership</strong> with "
+            f"<strong>{annual_decline_pct}% annual organic decay</strong>, "
+            f"the relaunch "
+            + (f"overtakes continuation readership at month #{readership_be} "
+               if readership_be else "never matches per-issue continuation readership ")
+            + f"but generates "
+            f"<strong>${abs(rev_delta)/1_000_000:.2f}M "
+            f"{'more' if rev_delta > 0 else 'less'}</strong> in total over {run_length} months. "
+            f"Adjust the inputs to find the threshold that changes the outcome."
+        )
+
+    st.markdown(f"""
+    <div style="background:#0d0d0d;border:2px solid {verdict_color};
+    padding:1.25rem 1.5rem;margin:0.75rem 0 1.5rem;max-width:820px;">
+    <div style="font-size:0.65rem;color:{verdict_color};font-family:'Courier New',monospace;
+    letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.6rem;">
+    Verdict: {verdict_icon}</div>
+    <p style="color:#d4d4d4;font-family:Georgia,serif;font-size:1rem;
+    line-height:1.75;margin:0;">{verdict_text}</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    data_note(
+        f"Continuation trajectory: {annual_decline_pct}% annual organic decay "
+        f"(~{(1 - issue_decline) * 100:.1f}%/issue), compounded monthly from {current_k//1000}k baseline. "
+        f"Relaunch trajectory: historical ASM retention rates from {baseline_k}k. "
+        f"Relaunch carries a two-month startup cost (zero orders at months 0-1). "
+        f"Revenue uses ${pub_net:.2f}/copy publisher net "
+        f"({PUBLISHER_MARGIN*100:.0f}% of ${cover_price:.2f} cover). "
+        f"Organic decline default (8%/yr) derived from ASM mid-run retention data "
+        f"(issues 12-24 show ~8-10% annual readership loss). "
+        f"Neither scenario includes trade paperback, digital, or international revenue."
+    )
+
     # ── Retention rate distribution ────────────────────────────────────────────
     section_heading("Retention Rate Distribution")
 
