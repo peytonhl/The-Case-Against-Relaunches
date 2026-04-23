@@ -830,6 +830,168 @@ def render():
         f"Neither scenario includes trade paperback, digital, or international revenue."
     )
 
+    # ── Opportunity cost: the tipping point ───────────────────────────────────
+    section_heading("The Opportunity Cost: Point of No Return")
+
+    prose("""
+    <p>
+    The comparison above answers "should we relaunch this specific title right now?"
+    But that question misses the deeper one: <strong>how did we get here?</strong>
+    </p>
+    <p>
+    Every relaunch resets the decay clock. The title spikes, then decays again.
+    The next time the question comes up, the current readership is lower than it would
+    have been under a stable run, and the relaunch opening is unlikely to be higher.
+    The tipping point moves closer with each cycle. Eventually the math forces
+    a relaunch not because it is the best creative decision, but because continuation
+    has become financially untenable.
+    </p>
+    <p>
+    The calculation below shows the exact readership floor at which relaunching
+    becomes the financially rational choice, given your current assumptions.
+    It is not a recommendation to relaunch. It is a diagnostic:
+    if your title is below this number, the relaunch model has already done its damage.
+    </p>
+    """)
+
+    # ── Tipping point calculation ──────────────────────────────────────────────
+    # The financial tipping point C* is where continuation revenue = relaunch revenue.
+    # continuation_rev(C*) = pub_net * C* * sum(d^i for i=0..run_length)
+    # relaunch_rev           = (fixed, computed above)
+    # => C* = relaunch_rev / (pub_net * sum(d^i))
+    sum_d = sum(issue_decline ** i for i in range(run_length + 1))
+    tipping_point = relaunch_rev / (pub_net * sum_d) if sum_d > 0 else 0
+
+    gap          = current_k - tipping_point
+    gap_k        = gap / 1_000
+    pct_above    = gap / tipping_point * 100 if tipping_point > 0 else 0
+    is_safe      = current_k >= tipping_point
+    status_color = "#6fbf7a" if is_safe else SCENARIO_COLOR
+    status_label = "ABOVE TIPPING POINT" if is_safe else "BELOW TIPPING POINT"
+    status_msg   = (
+        f"{abs(gap_k):.0f}k above — continuing is the financially rational choice"
+        if is_safe else
+        f"{abs(gap_k):.0f}k below — the numbers favor a relaunch at this baseline"
+    )
+
+    # ── Tipping point display ──────────────────────────────────────────────────
+    col_tp, col_status = st.columns([1, 1])
+    with col_tp:
+        st.markdown(f"""
+        <div style="background:#0d0d0d;border:1px solid #222;
+        padding:1.2rem 1.4rem;height:100%;">
+        <div style="font-size:0.65rem;color:#888;font-family:'Courier New',monospace;
+        letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.4rem;">
+        Financial tipping point</div>
+        <div style="font-size:2.6rem;font-family:Bangers,cursive;color:#e8b84b;
+        letter-spacing:0.05em;line-height:1.0;">{tipping_point/1000:.0f}k</div>
+        <div style="font-size:0.78rem;color:#888;font-family:Georgia,serif;
+        margin-top:0.4rem;line-height:1.5;">
+        Current readership below which a {baseline_k}k relaunch generates more
+        publisher gross than continuing over {run_length} months
+        at {annual_decline_pct}% annual decay.
+        </div>
+        </div>
+        """, unsafe_allow_html=True)
+    with col_status:
+        st.markdown(f"""
+        <div style="background:#0d0d0d;border:2px solid {status_color};
+        padding:1.2rem 1.4rem;height:100%;">
+        <div style="font-size:0.65rem;color:{status_color};font-family:'Courier New',monospace;
+        letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.4rem;">
+        {status_label}</div>
+        <div style="font-size:2.6rem;font-family:Bangers,cursive;color:{status_color};
+        letter-spacing:0.05em;line-height:1.0;">{current_k//1000}k</div>
+        <div style="font-size:0.78rem;color:#888;font-family:Georgia,serif;
+        margin-top:0.4rem;line-height:1.5;">
+        Your current readership. {status_msg}.
+        </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("<div style='height:1rem'></div>", unsafe_allow_html=True)
+
+    # ── Horizontal comparison bar ──────────────────────────────────────────────
+    tp_fig = go.Figure()
+    bar_vals   = [tipping_point / 1_000, current_k / 1_000]
+    bar_labels = ["Financial tipping point", f"Current readership ({current_k//1000}k)"]
+    bar_colors = ["#e8b84b", status_color]
+    bar_text   = [f"{tipping_point/1000:.0f}k", f"{current_k//1000}k"]
+
+    tp_fig.add_trace(go.Bar(
+        x=bar_vals,
+        y=bar_labels,
+        orientation="h",
+        marker_color=bar_colors,
+        text=bar_text,
+        textposition="outside",
+        textfont=dict(family="Bangers, cursive", size=16, color="#ffffff"),
+        hovertemplate="%{y}: <b>%{x:.0f}k orders</b><extra></extra>",
+        width=0.45,
+    ))
+
+    # Viability threshold marker
+    tp_fig.add_vline(
+        x=threshold_k / 1_000,
+        line=dict(color="#555", width=1.5, dash="dot"),
+        annotation_text="Cancellation zone",
+        annotation_position="top right",
+        annotation_font=dict(color="#555", size=10, family="'Courier New', monospace"),
+    )
+
+    tp_fig.update_layout(**dict(PLOTLY_LAYOUT))
+    tp_fig.update_layout(
+        title=dict(text=""),
+        height=200,
+        margin=dict(t=20, b=30, l=200, r=100),
+        xaxis=dict(
+            title="Orders (thousands)",
+            ticksuffix="k",
+            gridcolor="#1a1a1a",
+            range=[0, max(bar_vals) * 1.35],
+        ),
+        yaxis=dict(gridcolor="#1a1a1a"),
+        showlegend=False,
+    )
+    st.plotly_chart(tp_fig, use_container_width=True)
+
+    # ── The trap narrative ─────────────────────────────────────────────────────
+    opp_cost_m = abs(rev_delta) / 1_000_000
+
+    prose(f"""
+    <p>
+    <strong>The trap is self-reinforcing.</strong> A title launches, decays, and falls
+    toward its tipping point. At some point, the relaunch math starts to look compelling.
+    A new #1 is ordered. The title spikes, then decays again, this time from a lower
+    structural ceiling because the audience has been trained to treat each new volume
+    as disposable. The next tipping point arrives sooner. The cycle repeats.
+    </p>
+    <p>
+    Under the current inputs, the opportunity cost of the wrong decision is
+    <strong>${opp_cost_m:.2f}M in publisher gross over {run_length} months</strong>:
+    that is the revenue difference between the financially optimal path and the
+    suboptimal one.
+    {'That cost is real even if the relaunch "feels" like progress.'
+     if not is_safe else
+     'That cost falls on whichever publisher relaunches a title that still has readership worth protecting.'}
+    </p>
+    <p>
+    <strong>How to avoid the trap:</strong> The tipping point is not fixed.
+    It rises when the relaunch opening baseline rises (harder to achieve if the brand
+    has been devalued by repeated resets) and falls when the organic decay rate falls
+    (which happens when creative teams are given long enough to build the reader
+    relationship that makes people stay). A title that never relaunches never faces
+    this calculation. The tipping point only becomes relevant after the first reset.
+    </p>
+    """)
+
+    pull_quote(
+        f"The tipping point at this scenario is {tipping_point/1000:.0f}k. "
+        f"Below that number, relaunching is the rational financial move. "
+        f"The relaunch model spends years manufacturing the conditions "
+        f"that make that number unavoidable."
+    )
+
     # ── Retention rate distribution ────────────────────────────────────────────
     section_heading("Retention Rate Distribution")
 
